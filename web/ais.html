@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF8">
+		<title>DMA AisViewWeb</title>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+		<style type="text/css">
+		html {height: 100%}
+		body {height: 100%; margin: 0px; padding: 0px}
+		#map_canvas {height: 100%}
+		</style>
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+		<script type="text/javascript">
+			// Array containing the markers
+			var markersArray = [];
+
+			function generateGraphics(color, state, scale) {
+				return new google.maps.MarkerImage('icons/ship/ship_'+ color +'_'+ state +'.png',
+					// Set marker dimension
+					new google.maps.Size(32*scale, 32*scale),
+					// Set origin
+					new google.maps.Point(0,0),
+					// Set anchor
+					new google.maps.Point(16*scale, 16*scale),
+					// Set scale
+					new google.maps.Size(32*scale, 32*scale));
+			}
+
+			// Initalize the google map
+			function initialize() {
+				var latlng = new google.maps.LatLng(56, 11);
+				var myOptions = {
+					zoom: 10,
+					center: latlng,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				};
+				map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+				google.maps.event.addListener(map, 'zoom_changed', function() {
+					refreshShips(map.getBounds());
+				});
+				google.maps.event.addListener(map, 'dragend', function() {
+					refreshShips(map.getBounds());
+				});
+				google.maps.event.addListener(map, 'tilesloaded', function() {
+					refreshShips(map.getBounds());
+				});
+				setInterval("refreshShips(map.getBounds())",60*1000); 
+			}
+
+			function refreshShips(bounds) {
+				//setTimeout(function() {clearOverlays();}, 100);
+				clearOverlays();
+				$.getJSON(
+					'/api/http/ais?',
+					{
+						swLat: bounds.getSouthWest().lat().toString(),
+						swLon: bounds.getSouthWest().lng().toString(),
+						neLat: bounds.getNorthEast().lat().toString(),
+						neLon: bounds.getNorthEast().lng().toString()
+					}, 
+					function(targets) {
+						for(target in targets) {
+							var currentTarget = targets[target];
+							var myLatLon = new google.maps.LatLng(currentTarget.lat, currentTarget.lon);
+							var color;
+							var shipType;
+
+							// TODO: Match with new types
+							
+							switch(currentTarget.vesselType) {
+								case "PASSENGER_VESSEL":
+									color = "blue";
+									shipType = "Passenger vessel";
+									break;
+								case "CARGO_VESSEL":
+									color = "green";
+									shipType = "Cargo vessel";
+									break;								
+								case "TANKER":
+									color = "red";
+									shipType = "Tanker";
+									break;
+								case "HSC":
+									color = "yellow";
+									shipType = "High speed craft";
+									break;
+								case "TUG":
+									color = "turquoise";
+									shipType = "Tug boat";
+									break;
+								case "PILOT":
+									color = "orange";
+									shipType = "Pilot vessel";
+									break;
+								case "YACHT":
+									shipType = "Yacht"
+									color = "purple";
+									break;
+								case "UNSPECIFIED":
+									color = "gray";
+									shipType = "Unspecified vessel";
+									break;
+								default:
+									color = "gray";
+									shipType = "Unspecified vessel";
+									break;
+							}
+
+							var hoverString = shipType + " - " + currentTarget.sog.toFixed(2) + "kn / " + currentTarget.cog.toFixed(0) + "° - (" 
+							+ currentTarget.lat.toFixed(4) + "," + currentTarget.lon.toFixed(4) + ") - last report " + currentTarget.lastReceived + " s ago"; 
+							
+							if(currentTarget.moored == true){
+								var shipGraphics = generateGraphics(color, "moored", 1);
+								var marker = new google.maps.Marker({
+									position: myLatLon, 
+									map: map, 
+									icon: shipGraphics,
+									title: hoverString
+								});
+							} else {
+								var degree = Math.round(currentTarget.cog / 5.0) * 5;
+								if (degree == 360) {
+									degree = 0;
+								}
+								var shipGraphics = generateGraphics(color, degree, 1);
+								var marker = new google.maps.Marker({
+									position: myLatLon, 
+									map: map, 
+									icon: shipGraphics,
+									title: hoverString
+								});
+							}
+							
+							markersArray.push(marker);
+						}
+					});
+			}
+
+			function clearOverlays() {
+				if (markersArray) {
+					for (i in markersArray) {
+						markersArray[i].setMap(null);
+					}
+				}
+			}
+		</script>
+</head>
+	<body onload="initialize()">
+		<div id="map_canvas" style="width:100%; height:100%"></div>
+	</body>
+</html>
