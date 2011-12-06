@@ -395,7 +395,9 @@ MarkerManager.prototype.removeMarker = function (marker) {
 MarkerManager.prototype.addMarkers = function (markers, minZoom, opt_maxZoom) {
   var maxZoom = this.getOptMaxZoom_(opt_maxZoom);
   for (var i = markers.length - 1; i >= 0; i--) {
-    this.addMarkerBatch_(markers[i], minZoom, maxZoom);
+	  if(markers[i] != null){
+		  this.addMarkerBatch_(markers[i], minZoom, maxZoom);
+	  }
   }
 
   this.numMarkers_[minZoom] += markers.length;
