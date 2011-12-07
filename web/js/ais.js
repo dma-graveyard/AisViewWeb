@@ -2,17 +2,22 @@
 var mgr = null;
 var map = null;
 var batch = [];
+var markers = [];
+var refresh = false;
 
 /**
- * Ship type object
- * @param currentTarget Single ship target from.
- * @returns {Ship} Ship type object containing color, ship type and navigational state.
+ * Ship object
+ * @param shipId Ships unique id
+ * @param ship JSON ship data
+ * @param markerScale Scale of the google maps marker
+ * @returns Ship object
  */
-function Ship(shipId, ship) {
+function Ship(shipId, ship, markerScale) {
 	this.id = shipId;
 	this.lat = ship[1];
 	this.lon = ship[2];
 	this.latlon = new google.maps.LatLng(this.lat, this.lon);
+	
 	// Set color and ship type
 	switch (ship[4]) {
 		case "PASSENGER_VESSEL":
@@ -66,6 +71,18 @@ function Ship(shipId, ship) {
 		}
 		this.state = degree;
 	}
+	
+	// Generate the marker image
+	this.markerImage = new google.maps.MarkerImage('icons/ship/ship_' + this.color + '_' + this.state + '.png',
+	    // Set marker dimension
+	    new google.maps.Size(32 * markerScale, 32 * markerScale),
+	    // Set origin
+	    new google.maps.Point(0, 0),
+	    // Set anchor
+	    new google.maps.Point(16 * markerScale, 16 * markerScale),
+	    // Set scale
+	    new google.maps.Size(32 * markerScale, 32 * markerScale)
+    );
 }
 
 // Getters for the ship object
@@ -90,28 +107,11 @@ Ship.prototype = {
 	},
 	get getLatLon() {
 		return this.latlon;
+	},
+	get getMarkerImage() {
+		return this.markerImage;
 	}
 };
-
-
-/**
- * Generate graphics from ship target.
- * @param {currentTarget} ship target.
- * @param {scale} scaling factor of the graphic.
- * @returns google.maps.MarkerImage
- */
-function generateGraphics(ship, scale) {
-    return new google.maps.MarkerImage('icons/ship/ship_' + ship.getColor + '_' + ship.getState + '.png',
-	    // Set marker dimension
-	    new google.maps.Size(32 * scale, 32 * scale),
-	    // Set origin
-	    new google.maps.Point(0, 0),
-	    // Set anchor
-	    new google.maps.Point(16 * scale, 16 * scale),
-	    // Set scale
-	    new google.maps.Size(32 * scale, 32 * scale)
-    );
-}
 
 /**
  * Initialize the map
@@ -123,25 +123,70 @@ function setupMap() {
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    var initialListener = google.maps.event.addListener(map, 'tilesloaded', function () {
+    	getShipMarkers();
+    	google.maps.event.removeListener(initialListener);
+    });
+    setInterval("updateShipMarkers()", 60 * 100);
+    setInterval("refreshMarkerManager()", 60*5000);
 //    google.maps.event.addListener(map, 'zoom_changed', function () {
-//        setupShipMarkers();
-//    });
-//    google.maps.event.addListener(map, 'tilesloaded', function () {
 //        setupShipMarkers();
 //    });
 //    google.maps.event.addListener(map, 'dragend', function () {
 //    	getShipMarkers();
 //    });
-    setInterval("getShipMarkers()", 60 * 100);
-    var listener = google.maps.event.addListener(map, 'bounds_changed', function(){
-    	getShipMarkers();
-    	google.maps.event.removeListener(listener);
-	});
 }
 
 /**
- * Get ship targets from JSON and generate the markers from given targets.
- * @returns Array with entries of type google.maps.Marker
+ * Update markers positions, and add new markers without
+ * refreshing the MarkerManager.
+ * @returns
+ */
+function updateShipMarkers() {
+	$.getJSON('/api/http/ais?', {
+    	swLat:-360,
+    	swLon:-360,
+    	neLat:360,
+    	neLon:360
+    }, function (result) {
+    	var ships = result.ships;
+    	var refresh = false;
+    	// TODO run from 0 to ships.length to remove old targets...
+        for (shipId in ships) {
+        	var shipJSON = ships[shipId];
+        	var ship = new Ship(shipId, shipJSON, 1);
+            if(markers[shipId] != null) {
+            	var marker = markers[shipId];
+            	marker.setPosition(ship.getLatLon);
+            	marker.setTitle(ship.getTitle);
+            	marker.setIcon(ship.getMarkerImage);
+            } else {
+            	var marker = new google.maps.Marker({
+                    position: ship.getLatLon,
+                    title: ship.getTitle,
+                    icon: ship.getMarkerImage
+                });
+            	
+                markers[shipId] = marker;
+                mgr.addMarker(marker, 1);
+                refresh = true;
+            }
+        }
+    });
+}
+
+/**
+ * Refresh the marker manager to receive new targets
+ */
+function refreshMarkerManager() {
+	if(refresh) {
+    	mgr.refresh();
+    	refresh = false;
+    }
+}
+
+/**
+ * Bulk add ships on first run
  */
 function getShipMarkers() {
     $.getJSON('/api/http/ais?', {
@@ -157,35 +202,28 @@ function getShipMarkers() {
     	var ships = result.ships;
         for (shipId in ships) {
             var shipJSON = ships[shipId];
-            
             var ship = new Ship(shipId, shipJSON);
-            var shipGraphics = generateGraphics(ship, 1);
             
-            if(batch[ship.getId] != null) {
-            	var marker = batch[ship.getId];
-            	marker.setPosition(ship.getLatLon);
-            	marker.setTitle(ship.getTitle);
-            	marker.setIcon(shipGraphics);
-            } else {
-	            batch[ship.getId] = (new google.maps.Marker({
-	                position: ship.getLatLon,
-	                title: ship.getTitle,
-	                icon: shipGraphics
-	            }));
-            }
+        	var marker = new google.maps.Marker({
+        		id: shipId,
+        		position: ship.getLatLon,
+        		title: ship.getTitle,
+        		icon: ship.getMarkerImage
+            });
+        	
+        	// Event on marker mouse over
+        	google.maps.event.addListener(marker, 'mouseover', function() {
+        		marker.setTitle(marker.id);
+        	});
+        	
+            markers[ship.getId] = marker;
+            batch.push(marker);
         }
-        setupShipMarkers();
-    });
-}
-
-/**
- * Set up marker manager and add ship markers from marker array.
- */
-function setupShipMarkers() {
-	var mgrOptions = { borderPadding: 50, maxZoom: 15, trackMarkers: true };
-    mgr = new MarkerManager(map, mgrOptions);
-    google.maps.event.addListener(mgr, 'loaded', function () {
-        mgr.addMarkers(batch, 1);
-        mgr.refresh();
+        var mgrOptions = { /*borderPadding: 50,*/ maxZoom: 15, trackMarkers: true };
+        mgr = new MarkerManager(map, mgrOptions);
+        google.maps.event.addListener(mgr, 'loaded', function () {
+            mgr.addMarkers(batch, 1);
+            mgr.refresh();
+        });
     });
 }
