@@ -144,7 +144,7 @@ function setupMap() {
     });
     
     // Timing for ship movement
-    setInterval("updateShipMarkers()", 60 * 1000);
+    setInterval("updateShipMarkers()", 60*1000);
     
     // Timing for new ship target updates
     setInterval("refreshMarkerManager()", 60*5000);
@@ -206,6 +206,25 @@ function updateShipMarkers() {
             				content: result.navStatus
             			});
             			info.open(map, selectedMarker);
+            			
+            			var tracks = result.pastTrack.points;
+            			var path = [];
+            			for(track in tracks) {
+            				currentTrack = tracks[track];
+            				var latlon = new google.maps.LatLng(currentTrack.lat, currentTrack.lon);
+            				path.push(latlon);
+            			}
+            			var polyLine = new google.maps.Polyline({
+            					path: path,
+            					map: map,
+            					strokeColor: "#FF0000",
+            					geodesic: true
+            			});
+            			polyLine.setMap(map);
+
+            			google.maps.event.addListener(info, 'closeclick', function() {
+            				polyLine.setMap(null);
+            			});
             		});
             	});
             	
