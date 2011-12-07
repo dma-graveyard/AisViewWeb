@@ -3,13 +3,18 @@ var mgr = null;
 var map = null;
 var batch = [];
 var markers = [];
+var init = true;
 var refresh = false;
 
 /**
  * Ship object
- * @param shipId Ships unique id
- * @param ship JSON ship data
- * @param markerScale Scale of the google maps marker
+ * 
+ * @param shipId
+ *            Ships unique id
+ * @param ship
+ *            JSON ship data
+ * @param markerScale
+ *            Scale of the google maps marker
  * @returns Ship object
  */
 function Ship(shipId, ship, markerScale) {
@@ -59,7 +64,13 @@ function Ship(shipId, ship, markerScale) {
 	}
 	
 	// Set ship title
-	this.title = shipType /*+ " - " + currentTarget.sog.toFixed(2) + "kn / " + currentTarget.cog.toFixed(0) + "° - (" + currentTarget.lat.toFixed(4) + "," + currentTarget.lon.toFixed(4) + ") - last report " + currentTarget.lastReceived + " s ago"*/;
+	this.title = shipType /*
+							 * + " - " + currentTarget.sog.toFixed(2) + "kn / " +
+							 * currentTarget.cog.toFixed(0) + "° - (" +
+							 * currentTarget.lat.toFixed(4) + "," +
+							 * currentTarget.lon.toFixed(4) + ") - last report " +
+							 * currentTarget.lastReceived + " s ago"
+							 */;
 	
 	// Set navigational state
 	if (ship[5] == 1) {
@@ -85,7 +96,9 @@ function Ship(shipId, ship, markerScale) {
     );
 }
 
-// Getters for the ship object
+/**
+ * Getters for the Ship object
+ */
 Ship.prototype = {
 	get getId() {
 		return this.id;
@@ -120,26 +133,27 @@ function setupMap() {
     var myOptions = {
         zoom: 10,
         center: new google.maps.LatLng(56.00, 11.00),
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+        mapTypeId: google.maps.MapTypeId.TERRAIN
     };
     map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    
+    // Initial listener which runs only once when tiles have been loaded
     var initialListener = google.maps.event.addListener(map, 'tilesloaded', function () {
-    	getShipMarkers();
+    	updateShipMarkers();
     	google.maps.event.removeListener(initialListener);
     });
-    setInterval("updateShipMarkers()", 60 * 100);
+    
+    // Timing for ship movement
+    setInterval("updateShipMarkers()", 60 * 1000);
+    
+    // Timing for new ship target updates
     setInterval("refreshMarkerManager()", 60*5000);
-//    google.maps.event.addListener(map, 'zoom_changed', function () {
-//        setupShipMarkers();
-//    });
-//    google.maps.event.addListener(map, 'dragend', function () {
-//    	getShipMarkers();
-//    });
 }
 
 /**
- * Update markers positions, and add new markers without
- * refreshing the MarkerManager.
+ * Update markers positions, and add new markers without refreshing the
+ * MarkerManager.
+ * 
  * @returns
  */
 function updateShipMarkers() {
@@ -150,80 +164,77 @@ function updateShipMarkers() {
     	neLon:360
     }, function (result) {
     	var ships = result.ships;
-    	var refresh = false;
     	// TODO run from 0 to ships.length to remove old targets...
         for (shipId in ships) {
         	var shipJSON = ships[shipId];
         	var ship = new Ship(shipId, shipJSON, 1);
-            if(markers[shipId] != null) {
+        	
+            if(markers[shipId]) {
+            	// Marker exists just update data
             	var marker = markers[shipId];
             	marker.setPosition(ship.getLatLon);
             	marker.setTitle(ship.getTitle);
             	marker.setIcon(ship.getMarkerImage);
             } else {
+            	// Marker doesn't exist, create a new one
             	var marker = new google.maps.Marker({
+            		id: shipId,
                     position: ship.getLatLon,
                     title: ship.getTitle,
                     icon: ship.getMarkerImage
                 });
             	
+            	// Event on marker mouse over
+//            	google.maps.event.addListener(marker, 'mouseover', function() {
+//            		$.getJSON('/api/http/ais?', {
+//            			method: 'details',
+//            			id: marker.id
+//            		}, function(result) {
+//            			
+//            		});
+//            	});
+            	
+            	// Event on marker mouse click
+            	google.maps.event.addListener(marker, 'click', function() {
+            		var selectedMarker = this;
+            		$.getJSON('/api/http/ais?', {
+            			method: 'details',
+            			past_track: '1',
+            			id: this.id
+            		}, function(result) {
+            			var info = new google.maps.InfoWindow({
+            				content: result.navStatus
+            			});
+            			info.open(map, selectedMarker);
+            		});
+            	});
+            	
                 markers[shipId] = marker;
-                mgr.addMarker(marker, 1);
-                refresh = true;
+                if(init) {
+                    batch.push(marker);
+                } else {
+	                mgr.addMarker(marker, 1);
+	                refresh = true;
+                }
             }
         }
+        
+        // On first run, initialize the marker manager and batch add the markers.
+        if(init) {
+        	var mgrOptions = { /* borderPadding: 50, */ maxZoom: 15, trackMarkers: true };
+        	mgr = new MarkerManager(map, mgrOptions);
+        	google.maps.event.addListener(mgr, 'loaded', function () {
+        	    mgr.addMarkers(batch, 1);
+        	    mgr.refresh();
+        	});
+        	init = false;
+        }
     });
 }
 
-/**
- * Refresh the marker manager to receive new targets
- */
 function refreshMarkerManager() {
 	if(refresh) {
-    	mgr.refresh();
-    	refresh = false;
-    }
-}
-
-/**
- * Bulk add ships on first run
- */
-function getShipMarkers() {
-    $.getJSON('/api/http/ais?', {
-        /*swLat: map.getBounds().getSouthWest().lat().toString(),
-        swLon: map.getBounds().getSouthWest().lng().toString(),
-        neLat: map.getBounds().getNorthEast().lat().toString(),
-        neLon: map.getBounds().getNorthEast().lng().toString()*/
-    	swLat:-360,
-    	swLon:-360,
-    	neLat:360,
-    	neLon:360
-    }, function (result) {
-    	var ships = result.ships;
-        for (shipId in ships) {
-            var shipJSON = ships[shipId];
-            var ship = new Ship(shipId, shipJSON);
-            
-        	var marker = new google.maps.Marker({
-        		id: shipId,
-        		position: ship.getLatLon,
-        		title: ship.getTitle,
-        		icon: ship.getMarkerImage
-            });
-        	
-        	// Event on marker mouse over
-        	google.maps.event.addListener(marker, 'mouseover', function() {
-        		marker.setTitle(marker.id);
-        	});
-        	
-            markers[ship.getId] = marker;
-            batch.push(marker);
-        }
-        var mgrOptions = { /*borderPadding: 50,*/ maxZoom: 15, trackMarkers: true };
-        mgr = new MarkerManager(map, mgrOptions);
-        google.maps.event.addListener(mgr, 'loaded', function () {
-            mgr.addMarkers(batch, 1);
-            mgr.refresh();
-        });
-    });
+		mgr.refresh();
+		refresh = false;
+	}
 }
