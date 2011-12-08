@@ -1,10 +1,15 @@
-// Attributes
-var markerManagerZoom = 8;
+// Settings
+var mcOptions = {gridSize: 100, maxZoom: 15};
+
+var mgrOptions = { /* borderPadding: 50, */ maxZoom: 15, trackMarkers: true };
+var markerManagerMinZoom = 8;
+
 var markerManagerRefresh = 60*5000;
 var positionUpdate = 60*1000;
 
 // Global variables
 var mgr = null;
+var mcl = null;
 var map = null;
 var selectedMarker = null;
 var hoveredMarker = null;
@@ -38,7 +43,7 @@ function Ship(shipId, ship, markerScale, selected) {
 			this.color = "blue";
 			shipType = "Passenger vessel";
 			break;
-		case "CARGO_VESSEL":
+		case "19":
 			this.color = "green";
 			shipType = "Cargo vessel";
 			break;
@@ -246,7 +251,7 @@ function updateShipMarkers() {
                 if(init) {
                     batch.push(marker);
                 } else {
-	                mgr.addMarker(marker, markerManagerZoom);
+	                mgr.addMarker(marker, markerManagerMinZoom);
 	                refresh = true;
                 }
             }
@@ -254,14 +259,12 @@ function updateShipMarkers() {
         
         // On first run, initialize the marker manager and batch add the markers.
         if(init) {
-        	var mgrOptions = { /* borderPadding: 50, */ maxZoom: 15, trackMarkers: true };
         	mgr = new MarkerManager(map, mgrOptions);
         	google.maps.event.addListener(mgr, 'loaded', function () {
-        	    mgr.addMarkers(batch, markerManagerZoom);
+        	    mgr.addMarkers(batch, markerManagerMinZoom);
         	    mgr.refresh();
         	});
-        	var mcOptions = {gridSize: 50, maxZoom: 15};
-        	markerManager = new MarkerClusterer(map, batch, mcOptions);
+        	mcl = new MarkerClusterer(map, batch, mcOptions);
         	init = false;
         }
     });
@@ -275,10 +278,10 @@ function createPastTrack(tracks, info) {
 		path.push(latlon);
 	}
 	pastTrack = new google.maps.Polyline({
-			path: path,
-			map: map,
-			strokeColor: "#FF0000",
-			geodesic: true
+		path: path,
+		map: map,
+		strokeColor: "#FF0000",
+		geodesic: true
 	});
 	pastTrack.setMap(map);
 
@@ -290,6 +293,7 @@ function createPastTrack(tracks, info) {
 function refreshMarkerManager() {
 	if(refresh) {
 		mgr.refresh();
+    	mcl = new MarkerClusterer(map, batch, mcOptions);
 		refresh = false;
 	}
 }
