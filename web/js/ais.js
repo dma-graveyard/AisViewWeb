@@ -1,4 +1,9 @@
-// Array containing the markers
+// Attributes
+var markerManagerZoom = 8;
+var markerManagerRefresh = 60*5000;
+var positionUpdate = 60*1000;
+
+// Global variables
 var mgr = null;
 var map = null;
 var selectedMarker = null;
@@ -21,7 +26,7 @@ var refresh = false;
  *            Scale of the google maps marker
  * @returns Ship object
  */
-function Ship(shipId, ship, markerScale) {
+function Ship(shipId, ship, markerScale, selected) {
 	this.id = shipId;
 	this.lat = ship[1];
 	this.lon = ship[2];
@@ -67,14 +72,8 @@ function Ship(shipId, ship, markerScale) {
 			break;
 	}
 	
-	// Set ship title
-	this.title = shipType /*
-							 * + " - " + currentTarget.sog.toFixed(2) + "kn / " +
-							 * currentTarget.cog.toFixed(0) + "° - (" +
-							 * currentTarget.lat.toFixed(4) + "," +
-							 * currentTarget.lon.toFixed(4) + ") - last report " +
-							 * currentTarget.lastReceived + " s ago"
-							 */;
+	// Set ship title (currently unused)
+	this.title = shipType;
 	
 	// Set navigational state
 	if (ship[5] == 1) {
@@ -88,16 +87,20 @@ function Ship(shipId, ship, markerScale) {
 	}
 	
 	// Generate the marker image
-	this.markerImage = new google.maps.MarkerImage('icons/ship/ship_' + this.color + '_' + this.state + '.png',
-	    // Set marker dimension
-	    new google.maps.Size(32 * markerScale, 32 * markerScale),
-	    // Set origin
-	    new google.maps.Point(0, 0),
-	    // Set anchor
-	    new google.maps.Point(16 * markerScale, 16 * markerScale),
-	    // Set scale
-	    new google.maps.Size(32 * markerScale, 32 * markerScale)
-    );
+	if(!selected) {
+		this.markerImage = new google.maps.MarkerImage('icons/ship/ship_' + this.color + '_' + this.state + '.png',
+		    // Set marker dimension
+		    new google.maps.Size(32 * markerScale, 32 * markerScale),
+		    // Set origin
+		    new google.maps.Point(0, 0),
+		    // Set anchor
+		    new google.maps.Point(16 * markerScale, 16 * markerScale),
+		    // Set scale
+		    new google.maps.Size(32 * markerScale, 32 * markerScale)
+	    );
+	} else {
+		//TODO: generate a path to image when marker is selected.
+	}
 }
 
 /**
@@ -148,10 +151,10 @@ function setupMap() {
     });
     
     // Timing for ship movement
-    setInterval("updateShipMarkers()", 60*1000);
+    setInterval("updateShipMarkers()", positionUpdate);
     
     // Timing for new ship target updates
-    setInterval("refreshMarkerManager()", 60*5000);
+    setInterval("refreshMarkerManager()", markerManagerRefresh);
 }
 
 /**
@@ -238,11 +241,12 @@ function updateShipMarkers() {
             		});
             	});
             	
+            	/* Add markers to marker manager */
                 markers[shipId] = marker;
                 if(init) {
                     batch.push(marker);
                 } else {
-	                mgr.addMarker(marker, 1);
+	                mgr.addMarker(marker, markerManagerZoom);
 	                refresh = true;
                 }
             }
@@ -253,9 +257,11 @@ function updateShipMarkers() {
         	var mgrOptions = { /* borderPadding: 50, */ maxZoom: 15, trackMarkers: true };
         	mgr = new MarkerManager(map, mgrOptions);
         	google.maps.event.addListener(mgr, 'loaded', function () {
-        	    mgr.addMarkers(batch, 1);
+        	    mgr.addMarkers(batch, markerManagerZoom);
         	    mgr.refresh();
         	});
+        	var mcOptions = {gridSize: 50, maxZoom: 15};
+        	markerManager = new MarkerClusterer(map, batch, mcOptions);
         	init = false;
         }
     });
