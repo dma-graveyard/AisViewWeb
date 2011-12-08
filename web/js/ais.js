@@ -1,5 +1,5 @@
 // Settings
-var mcOptions = {gridSize: 100, maxZoom: 15};
+var mcOptions = {gridSize: 100, maxZoom: 15, minimumClusterSize: 10};
 
 var mgrOptions = { /* borderPadding: 50, */ maxZoom: 15, trackMarkers: true };
 var markerManagerMinZoom = 8;
