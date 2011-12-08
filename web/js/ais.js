@@ -1,8 +1,12 @@
 // Array containing the markers
 var mgr = null;
 var map = null;
+var selectedMarker = null;
+var hoveredMarker = null;
+var pastTrack = null;
 var batch = [];
 var markers = [];
+var infoBoxes = [];
 var init = true;
 var refresh = false;
 
@@ -173,30 +177,52 @@ function updateShipMarkers() {
             	// Marker exists just update data
             	var marker = markers[shipId];
             	marker.setPosition(ship.getLatLon);
-            	marker.setTitle(ship.getTitle);
             	marker.setIcon(ship.getMarkerImage);
             } else {
             	// Marker doesn't exist, create a new one
             	var marker = new google.maps.Marker({
             		id: shipId,
                     position: ship.getLatLon,
-                    title: ship.getTitle,
                     icon: ship.getMarkerImage
                 });
             	
+            	/* Marker events */
+            	
             	// Event on marker mouse over
-//            	google.maps.event.addListener(marker, 'mouseover', function() {
-//            		$.getJSON('/api/http/ais?', {
-//            			method: 'details',
-//            			id: marker.id
-//            		}, function(result) {
-//            			
-//            		});
-//            	});
+            	google.maps.event.addListener(marker, 'mouseover', function() {
+            		hoveredMarker = this;
+            		$.getJSON('/api/http/ais?', {
+            			method: 'details',
+            			id: this.id
+            		}, function(result) {
+            			var boxText = document.createElement("div");
+            			boxText.className = "shipHover"
+            	        boxText.innerHTML = result.name;
+            	                
+            	        var myOptions = {
+            	        	content: boxText,
+        	                disableAutoPan: true,
+        	                maxWidth: 0,
+        	                pixelOffset: new google.maps.Size(-75, 20),
+    	                    closeBoxURL: "",
+        	                pane: "floatPane",
+            	        };
+            	        
+            	        var infoBox = new InfoBox(myOptions);
+            	        infoBox.open(map, hoveredMarker);
+            	        infoBoxes.push(infoBox);
+            		});
+            	});
+            	
+            	google.maps.event.addListener(marker, 'mouseout', function() {
+            		for(infoBox in infoBoxes) {
+            			infoBoxes[infoBox].close();
+            		}
+            	});	
             	
             	// Event on marker mouse click
             	google.maps.event.addListener(marker, 'click', function() {
-            		var selectedMarker = this;
+            		selectedMarker = this;
             		$.getJSON('/api/http/ais?', {
             			method: 'details',
             			past_track: '1',
@@ -208,23 +234,7 @@ function updateShipMarkers() {
             			info.open(map, selectedMarker);
             			
             			var tracks = result.pastTrack.points;
-            			var path = [];
-            			for(track in tracks) {
-            				currentTrack = tracks[track];
-            				var latlon = new google.maps.LatLng(currentTrack.lat, currentTrack.lon);
-            				path.push(latlon);
-            			}
-            			var polyLine = new google.maps.Polyline({
-            					path: path,
-            					map: map,
-            					strokeColor: "#FF0000",
-            					geodesic: true
-            			});
-            			polyLine.setMap(map);
-
-            			google.maps.event.addListener(info, 'closeclick', function() {
-            				polyLine.setMap(null);
-            			});
+            			createPastTrack(tracks, info);
             		});
             	});
             	
@@ -249,6 +259,26 @@ function updateShipMarkers() {
         	init = false;
         }
     });
+}
+
+function createPastTrack(tracks, info) {
+	var path = [];
+	for(track in tracks) {
+		currentTrack = tracks[track];
+		var latlon = new google.maps.LatLng(currentTrack.lat, currentTrack.lon);
+		path.push(latlon);
+	}
+	pastTrack = new google.maps.Polyline({
+			path: path,
+			map: map,
+			strokeColor: "#FF0000",
+			geodesic: true
+	});
+	pastTrack.setMap(map);
+
+	google.maps.event.addListener(info, 'closeclick', function() {
+		pastTrack.setMap(null);
+	});
 }
 
 function refreshMarkerManager() {
