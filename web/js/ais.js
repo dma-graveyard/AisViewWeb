@@ -1,24 +1,26 @@
 // Settings
-var mcOptions = {gridSize: 50, maxZoom: 15, minimumClusterSize: 10};
+var mcOptions = {
+	gridSize: 50, 
+	maxZoom: 15, 
+	minimumClusterSize: 10
+};
 
-var mgrOptions = {borderPadding: 50, maxZoom: 15, trackMarkers: true};
-var markerManagerMinZoom = 4;
-
-var markerManagerRefresh = 60*5000;
+var markerClustererRefresh = 60*5000;
 var positionUpdate = 60*1000;
 
 var markerDimension = 32;
 var markerAnchor = 32/2;
 var markerAngleInterval = 10;
 
-var mapDefaultZoom = 6;
-var mapDefaultCenter = new google.maps.LatLng(56.00, 11.00);
-var mapDefaultType = google.maps.MapTypeId.TERRAIN;
+var mapOptions = {
+	zoom: 6,
+	center: new google.maps.LatLng(56.00, 11.00),
+	mapTypeId: google.maps.MapTypeId.TERRAIN
+};
 
 var serviceURL = '/ais/api/http/service?';
 
 // Global variables
-var mgr = null;
 var mcl = null;
 var map = null;
 var selectedMarker = null;
@@ -127,12 +129,7 @@ Ship.prototype = {
  * Initialize the map
  */
 function setupMap() {
-    var myOptions = {
-        zoom: mapDefaultZoom,
-        center: mapDefaultCenter,
-        mapTypeId: mapDefaultType
-    };
-    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
     
     // Initial listener which runs only once when tiles have been loaded
     var initialListener = google.maps.event.addListener(map, 'tilesloaded', function () {
@@ -150,7 +147,7 @@ function setupMap() {
     setInterval("updateShipMarkers()", positionUpdate);
     
     // Timing for new ship target updates
-    setInterval("refreshMarkerManager()", markerManagerRefresh);
+    setInterval("refreshMarkerClusterer()", markerClustererRefresh);
 }
 
 /**
@@ -237,25 +234,16 @@ function updateShipMarkers() {
             		});
             	});
             	
-            	/* Add markers to marker manager */
+            	/* Add marker to batch */
                 markers[shipId] = marker;
-                if(init) {
-                    batch.push(marker);
-                } else {
-	                mgr.addMarker(marker, markerManagerMinZoom);
-	                refresh = true;
-                }
+            	batch.push(marker);
+            	refresh = true;
             }
         }
         
-        // On first run, initialize the marker manager and batch add the markers.
+        // On first run, initialize the marker clusterer by batch adding the markers.
         if(init) {
-        	mgr = new MarkerManager(map, mgrOptions);
-        	google.maps.event.addListener(mgr, 'loaded', function () {
-        	    mgr.addMarkers(batch, markerManagerMinZoom);
-        	    mgr.refresh();
-        	});
-        	mcl = new MarkerClusterer(map, batch, mcOptions);
+        	refreshMarkerClusterer();
         	init = false;
         }
     });
@@ -281,9 +269,8 @@ function createPastTrack(tracks, info) {
 	});
 }
 
-function refreshMarkerManager() {
+function refreshMarkerClusterer() {
 	if(refresh) {
-		mgr.refresh();
     	mcl = new MarkerClusterer(map, batch, mcOptions);
 		refresh = false;
 	}
