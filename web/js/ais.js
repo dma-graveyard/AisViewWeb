@@ -50,7 +50,7 @@ var selectionImage = new google.maps.MarkerImage('img/selection.png',
  *            Scale of the google maps marker
  * @returns Ship object
  */
-function Ship(shipId, ship, markerScale, selected) {
+function Ship(shipId, ship, markerScale) {
 	this.id = shipId;
 	this.lat = ship[1];
 	this.lon = ship[2];
@@ -73,34 +73,31 @@ function Ship(shipId, ship, markerScale, selected) {
 		this.moored = true;
 	}
 	
+	// TODO move this sever side?
 	this.degree = Math.round(ship[0] / 10.0) * 10;
 	if (this.degree == 360) {
 		this.degree = 0;
 	}
 	
 	// Generate the marker image
-	if(!selected) {
-		if(!this.moored) {
-			this.markerImage = new google.maps.MarkerImage('img/ships.png',
-			    // Set size
-			    new google.maps.Size(markerDimension * markerScale, markerDimension * markerScale),
-			    // Set origin
-			    new google.maps.Point(markerDimension * this.color, markerDimension * (this.degree / markerAngleInterval + 1)),
-			    // Set anchor
-			    new google.maps.Point(markerAnchor * markerScale, markerAnchor * markerScale)
-		    );
-		} else {
-			this.markerImage = new google.maps.MarkerImage('img/ships.png',
-			    // Set size
-			    new google.maps.Size(markerDimension * markerScale, markerDimension * markerScale),
-			    // Set origin
-			    new google.maps.Point(markerDimension * this.color, 0),
-			    // Set anchor
-			    new google.maps.Point(markerAnchor * markerScale, markerAnchor * markerScale)
-		    );
-		}
+	if(!this.moored) {
+		this.markerImage = new google.maps.MarkerImage('img/ships.png',
+		    // Set size
+		    new google.maps.Size(markerDimension * markerScale, markerDimension * markerScale),
+		    // Set origin
+		    new google.maps.Point(markerDimension * this.color, markerDimension * (this.degree / markerAngleInterval + 1)),
+		    // Set anchor
+		    new google.maps.Point(markerAnchor * markerScale, markerAnchor * markerScale)
+	    );
 	} else {
-		//TODO: generate a path to image when marker is selected.
+		this.markerImage = new google.maps.MarkerImage('img/ships.png',
+		    // Set size
+		    new google.maps.Size(markerDimension * markerScale, markerDimension * markerScale),
+		    // Set origin
+		    new google.maps.Point(markerDimension * this.color, 0),
+		    // Set anchor
+		    new google.maps.Point(markerAnchor * markerScale, markerAnchor * markerScale)
+	    );
 	}
 }
 
@@ -150,6 +147,10 @@ function setupMap() {
     	for(infoBox in infoBoxes) {
 			infoBoxes[infoBox].close();
 		}
+    });
+    
+    google.maps.event.addListener(map, 'mousedown', function() {
+    	clearSelectedShip();
     });
     
     // Timing for ship movement
@@ -238,7 +239,7 @@ function updateShipMarkers() {
             			id: this.id
             		}, function(result) {
             			selectedMarker.setShadow(selectionImage);
-            			$("#callsign").html(result.callsign);
+            			updateShipData(result);
             			var tracks = result.pastTrack.points;
             			createPastTrack(tracks);
             		});
@@ -251,12 +252,35 @@ function updateShipMarkers() {
             }
         }
         
+        // If there is a selected ship, update it's data and track
+        if(selectedMarker != null) {
+        	$.getJSON(serviceURL, {
+        		method: 'details',
+        		past_track: '1',
+        		id: selectedMarker.id
+        	}, function(result) {
+        		updateShipData(result);
+        		var tracks = result.pastTrack.points;
+        		createPastTrack(tracks);
+        	});
+        }
+        
         // On first run, initialize the marker clusterer by batch adding the markers.
         if(init) {
         	refreshMarkerClusterer();
         	init = false;
         }
     });
+}
+
+/**
+ * Method for updating selected ship's info
+ * @param result 
+ */
+function updateShipData(result) {
+	$("#callsign").html(result.callsign);
+	$("#lat").html(result.lat);
+	$("#lon").html(result.lon);
 }
 
 /**
@@ -283,6 +307,21 @@ function createPastTrack(tracks) {
 	pastTrack.setMap(map);
 }
 
+function clearSelectedShip() {
+	if(pastTrack != null) {
+		pastTrack.setMap(null);		
+	}
+	if(selectedMarker != null) {
+		selectedMarker.setShadow(null);
+	}
+	$("#callsign").html("");
+	$("#lat").html("");
+	$("#lon").html("");
+}
+
+/**
+ * Method for refreshing the marker clusterer
+ */
 function refreshMarkerClusterer() {
 	if(refresh) {
     	mcl = new MarkerClusterer(map, batch, mcOptions);
