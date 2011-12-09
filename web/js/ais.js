@@ -56,27 +56,36 @@ function Ship(shipId, ship, markerScale, selected) {
 			break;
 	}
 	
-	// Set navigational state
 	if (ship[5] == 1) {
-		this.state = "moored";
-	} else {
-		var degree = Math.round(ship[0] / 10.0) * 10;
-		if (degree == 360) {
-			degree = 0;
-		}
-		this.state = degree;
+		this.moored = true;
+	}
+	
+	this.degree = Math.round(ship[0] / 10.0) * 10;
+	if (this.degree == 360) {
+		this.degree = 0;
 	}
 	
 	// Generate the marker image
 	if(!selected) {
-		this.markerImage = new google.maps.MarkerImage('img/ships.png',
-		    // Set size
-		    new google.maps.Size(markerDimension * markerScale, markerDimension * markerScale),
-		    // Set origin
-		    new google.maps.Point(markerDimension * this.color, markerDimension * this.state / markerAngleInterval),
-		    // Set anchor
-		    new google.maps.Point(markerAnchor * markerScale, markerAnchor * markerScale)
-	    );
+		if(!this.moored) {
+			this.markerImage = new google.maps.MarkerImage('img/ships.png',
+			    // Set size
+			    new google.maps.Size(markerDimension * markerScale, markerDimension * markerScale),
+			    // Set origin
+			    new google.maps.Point(markerDimension * this.color, markerDimension * (this.degree / markerAngleInterval + 1)),
+			    // Set anchor
+			    new google.maps.Point(markerAnchor * markerScale, markerAnchor * markerScale)
+		    );
+		} else {
+			this.markerImage = new google.maps.MarkerImage('img/ships.png',
+			    // Set size
+			    new google.maps.Size(markerDimension * markerScale, markerDimension * markerScale),
+			    // Set origin
+			    new google.maps.Point(markerDimension * this.color, 0),
+			    // Set anchor
+			    new google.maps.Point(markerAnchor * markerScale, markerAnchor * markerScale)
+		    );
+		}
 	} else {
 		//TODO: generate a path to image when marker is selected.
 	}
@@ -98,8 +107,11 @@ Ship.prototype = {
 	get getColor() {
 		return this.color;
 	},
-	get getState() {
-		return this.state;
+	get isMoored() {
+		return this.moored;
+	},
+	get getDegree() {
+		return this.degree;
 	},
 	get getLatLon() {
 		return this.latlon;
