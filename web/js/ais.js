@@ -1,11 +1,19 @@
 // Settings
-var mcOptions = {gridSize: 100, maxZoom: 15, minimumClusterSize: 10};
+var mcOptions = {gridSize: 50, maxZoom: 15, minimumClusterSize: 10};
 
-var mgrOptions = { /* borderPadding: 50, */ maxZoom: 15, trackMarkers: true };
-var markerManagerMinZoom = 8;
+var mgrOptions = {borderPadding: 50, maxZoom: 15, trackMarkers: true};
+var markerManagerMinZoom = 4;
 
 var markerManagerRefresh = 60*5000;
 var positionUpdate = 60*1000;
+
+var markerDimension = 32;
+var markerAnchor = 32/2;
+var markerAngleInterval = 10;
+
+var mapDefaultZoom = 6;
+var mapDefaultCenter = new google.maps.LatLng(56.00, 11.00);
+var mapDefaultType = google.maps.MapTypeId.TERRAIN;
 
 // Global variables
 var mgr = null;
@@ -23,10 +31,8 @@ var refresh = false;
 /**
  * Ship object
  * 
- * @param shipId
- *            Ships unique id
- * @param ship
- *            JSON ship data
+ * @param shipId Ships unique id
+ * @param ship JSON ship data
  * @param markerScale
  *            Scale of the google maps marker
  * @returns Ship object
@@ -39,52 +45,22 @@ function Ship(shipId, ship, markerScale, selected) {
 	
 	// Set color and ship type
 	switch (ship[4]) {
-		case "PASSENGER_VESSEL":
-			this.color = "blue";
-			shipType = "Passenger vessel";
-			break;
 		case "19":
-			this.color = "green";
-			shipType = "Cargo vessel";
+			this.color = 2;
 			break;
-		case "TANKER":
-			this.color = "red";
-			shipType = "Tanker";
-			break;
-		case "HSC":
-			this.color = "yellow";
-			shipType = "High speed craft";
-			break;
-		case "TUG":
-			this.color = "turquoise";
-			shipType = "Tug boat";
-			break;
-		case "PILOT":
-			this.color = "orange";
-			shipType = "Pilot vessel";
-			break;
-		case "YACHT":
-			this.color = "purple";
-			shipType = "Yacht";
-			break;
-		case "UNSPECIFIED":
-			this.color = "gray";
-			shipType = "Unspecified vessel";
+		case "18":
+			this.color = 4;
 			break;
 		default:
-			this.color = "gray";
-			shipType = "Unspecified vessel";
+			this.color = 1;
 			break;
 	}
-	
-	// Set ship title (currently unused)
-	this.title = shipType;
 	
 	// Set navigational state
 	if (ship[5] == 1) {
 		this.state = "moored";
 	} else {
-		var degree = Math.round(ship[0] / 5.0) * 5;
+		var degree = Math.round(ship[0] / 10.0) * 10;
 		if (degree == 360) {
 			degree = 0;
 		}
@@ -93,15 +69,13 @@ function Ship(shipId, ship, markerScale, selected) {
 	
 	// Generate the marker image
 	if(!selected) {
-		this.markerImage = new google.maps.MarkerImage('icons/ship/ship_' + this.color + '_' + this.state + '.png',
-		    // Set marker dimension
-		    new google.maps.Size(32 * markerScale, 32 * markerScale),
+		this.markerImage = new google.maps.MarkerImage('img/ships.png',
+		    // Set size
+		    new google.maps.Size(markerDimension * markerScale, markerDimension * markerScale),
 		    // Set origin
-		    new google.maps.Point(0, 0),
+		    new google.maps.Point(markerDimension * this.color, markerDimension * this.state / markerAngleInterval),
 		    // Set anchor
-		    new google.maps.Point(16 * markerScale, 16 * markerScale),
-		    // Set scale
-		    new google.maps.Size(32 * markerScale, 32 * markerScale)
+		    new google.maps.Point(markerAnchor * markerScale, markerAnchor * markerScale)
 	    );
 	} else {
 		//TODO: generate a path to image when marker is selected.
@@ -124,9 +98,6 @@ Ship.prototype = {
 	get getColor() {
 		return this.color;
 	},
-	get getTitle() {
-		return this.title;
-	},
 	get getState() {
 		return this.state;
 	},
@@ -143,9 +114,9 @@ Ship.prototype = {
  */
 function setupMap() {
     var myOptions = {
-        zoom: 10,
-        center: new google.maps.LatLng(56.00, 11.00),
-        mapTypeId: google.maps.MapTypeId.TERRAIN
+        zoom: mapDefaultZoom,
+        center: mapDefaultCenter,
+        mapTypeId: mapDefaultType
     };
     map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
     
