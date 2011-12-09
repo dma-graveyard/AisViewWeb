@@ -20,6 +20,8 @@ var mapOptions = {
 
 var serviceURL = '/ais/api/http/service?';
 
+var countries = null;
+
 // Global variables
 var mcl = null;
 var map = null;
@@ -31,6 +33,7 @@ var markers = [];
 var infoBoxes = [];
 var init = true;
 var refresh = false;
+var country = null;
 
 var selectionImage = new google.maps.MarkerImage('img/selection.png',
     // Set size
@@ -172,6 +175,8 @@ function updateShipMarkers() {
     	swLon:-360,
     	neLat:360,
     	neLon:360
+    	// This results in internal server error because of OverviewRequest StringUtils not found
+    	//,countries: countries
     }, function (result) {
     	var ships = result.ships;
     	// TODO run from 0 to ships.length to remove old targets...

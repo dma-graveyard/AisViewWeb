@@ -14,31 +14,52 @@
 	<body onload="setupMap()">
 		<div id="sidebar">
 			<div id="info">
-				callsign: <div id="callsign"></div><br/>
-				cargo: <div id="cargo"></div><br/>
-				cog: <div id="cog"></div><br/>
-				currentTime: <div id="currentTime"></div><br/>
-				destination: <div id="destintation"></div><br/>
-				draught: <div id="draught"></div><br/>
-				eta: <div id="eta"></div><br/>
-				heading: <div id="heading"></div><br/>
-				id: <div id="id"></div><br/>
-				imoNo: <div id="imoNo"></div><br/>
-				lastReceived: <div id="lastReceived"></div><br/>
-				lat: <div id="lat"></div><br/>
-				length: <div id="length"></div><br/>
-				lon: <div id="lon"></div><br/>
-				mmsi: <div id="mmsi"></div><br/>
-				moored: <div id="moored"></div><br/>
-				name: <div id="name"></div><br/>
-				navStatus: <div id="navStatus"></div><br/>
-				posAcc: <div id="posAcc"></div><br/>
-				sog: <div id="sog"></div><br/>
-				source: <div id="source"></div><br/>
-				vesselClass: <div id="vesselClass"></div><br/>
-				vesselType: <div id="vesselType"></div><br/>
+				callsign: <div id="callsign"></div>
+				cargo: <div id="cargo"></div>
+				cog: <div id="cog"></div>
+				currentTime: <div id="currentTime"></div>
+				destination: <div id="destintation"></div>
+				draught: <div id="draught"></div>
+				eta: <div id="eta"></div>
+				heading: <div id="heading"></div>
+				id: <div id="id"></div>
+				imoNo: <div id="imoNo"></div>
+				lastReceived: <div id="lastReceived"></div>
+				lat: <div id="lat"></div>
+				length: <div id="length"></div>
+				lon: <div id="lon"></div>
+				mmsi: <div id="mmsi"></div>
+				moored: <div id="moored"></div>
+				name: <div id="name"></div>
+				navStatus: <div id="navStatus"></div>
+				posAcc: <div id="posAcc"></div>
+				sog: <div id="sog"></div>
+				source: <div id="source"></div>
+				vesselClass: <div id="vesselClass"></div>
+				vesselType: <div id="vesselType"></div>
 				width: <div id="width"></div>
 			</div>
+			<div id="filter">
+				<h3>Filters:</h3>			
+				<form action="">
+					<input type="checkbox" id="DNK">Danish ships
+				</form>
+			</div>
+			<script type="text/javascript">
+				$("#DNK").click(function() {
+					if($(this).is(":checked")) {
+						countries = "DNK";
+				        init = true;
+				        batch = [];
+				        updateShipMarkers();
+				    } else {
+				    	countries = null;
+				        init = true;
+				        batch = [];
+				        updateShipMarkers();
+					}
+				});
+			</script>
 		</div>
 		<div id="content-container">
 			<div id="map_canvas"></div>
