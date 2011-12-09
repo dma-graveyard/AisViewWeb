@@ -32,6 +32,15 @@ var infoBoxes = [];
 var init = true;
 var refresh = false;
 
+var selectionImage = new google.maps.MarkerImage('img/selection.png',
+    // Set size
+    new google.maps.Size(markerDimension, markerDimension),
+    // Set origin
+    new google.maps.Point(0, 0),
+    // Set anchor
+    new google.maps.Point(markerAnchor, markerAnchor)
+);
+
 /**
  * Ship object
  * 
@@ -218,19 +227,20 @@ function updateShipMarkers() {
             	
             	// Event on marker mouse click
             	google.maps.event.addListener(marker, 'click', function() {
+            		// remove previous selection
+            		if(selectedMarker != null) {
+            			selectedMarker.setShadow(null);
+            		}
             		selectedMarker = this;
             		$.getJSON(serviceURL, {
             			method: 'details',
             			past_track: '1',
             			id: this.id
             		}, function(result) {
-            			var info = new google.maps.InfoWindow({
-            				content: result.navStatus
-            			});
-            			info.open(map, selectedMarker);
-            			
+            			selectedMarker.setShadow(selectionImage);
+            			$("#callsign").html(result.callsign);
             			var tracks = result.pastTrack.points;
-            			createPastTrack(tracks, info);
+            			createPastTrack(tracks);
             		});
             	});
             	
@@ -249,7 +259,15 @@ function updateShipMarkers() {
     });
 }
 
-function createPastTrack(tracks, info) {
+/**
+ * Create the past track
+ * @param tracks Array of tracks
+ */
+function createPastTrack(tracks) {
+	// close previous past track if it exists
+	if(pastTrack != null) {
+		pastTrack.setMap(null);
+	}
 	var path = [];
 	for(track in tracks) {
 		currentTrack = tracks[track];
@@ -263,10 +281,6 @@ function createPastTrack(tracks, info) {
 		geodesic: true
 	});
 	pastTrack.setMap(map);
-
-	google.maps.event.addListener(info, 'closeclick', function() {
-		pastTrack.setMap(null);
-	});
 }
 
 function refreshMarkerClusterer() {

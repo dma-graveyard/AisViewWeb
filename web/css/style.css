@@ -1,41 +1,58 @@
 html {
 	
 }
+
 body {
 	margin: 0px;
 	padding: 0px;
 }
+
 .clear {
 	clear: both;
 }
+
 #map_canvas {
 	height: 100%;
 	width: 100%;
 }
-#header {
-	height: 45px;
-}
+
 #sidebar {
-	position: relative;
-	width: 150px;
+	background: none repeat scroll 0 0 #505050;
+	border-right: 1px solid #303030;
+	height: 100%;
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 220px;
+	z-index: 495;
 }
+
+#info {
+	width: 210px;
+	position: relative;
+	margin: 5px auto;
+}
+
 #content-container {
 	background: none repeat scroll 0 0 #404040;
-    height: 100%;
-    min-width: 1000px;
-    position: absolute;
-    width: 100%;
-    z-index: 494;
+	height: 100%;
+	min-width: 1000px;
+	position: absolute;
+	width: 100%;
+	z-index: 494;
 }
+
 .shipHover {
 	margin-top: 7px;
-	background: black; color : #fff;
+	background: black;
+	color: #fff;
 	font: 9px verdana;
 	padding: 5px;
 	color: #fff;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 }
+
 .infoBox {
 	background: url('../img/boxTip.png') no-repeat;
 	opacity: 0.75;
