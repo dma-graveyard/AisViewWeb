@@ -140,6 +140,12 @@ function setupMap() {
     	google.maps.event.removeListener(initialListener);
     });
     
+    google.maps.event.addListener(map, 'dragstart', function() {
+    	for(infoBox in infoBoxes) {
+			infoBoxes[infoBox].close();
+		}
+    });
+    
     // Timing for ship movement
     setInterval("updateShipMarkers()", positionUpdate);
     
