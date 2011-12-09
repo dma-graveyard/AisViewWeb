@@ -149,7 +149,7 @@ function setupMap() {
 		}
     });
     
-    google.maps.event.addListener(map, 'mousedown', function() {
+    google.maps.event.addListener(map, 'click', function() {
     	clearSelectedShip();
     });
     
