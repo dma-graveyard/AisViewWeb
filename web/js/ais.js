@@ -15,6 +15,8 @@ var mapDefaultZoom = 6;
 var mapDefaultCenter = new google.maps.LatLng(56.00, 11.00);
 var mapDefaultType = google.maps.MapTypeId.TERRAIN;
 
+var serviceURL = '/ais/api/http/service?';
+
 // Global variables
 var mgr = null;
 var mcl = null;
@@ -152,7 +154,7 @@ function setupMap() {
  * @returns
  */
 function updateShipMarkers() {
-	$.getJSON('/api/http/ais?', {
+	$.getJSON(serviceURL, {
     	swLat:-360,
     	swLon:-360,
     	neLat:360,
@@ -182,7 +184,7 @@ function updateShipMarkers() {
             	// Event on marker mouse over
             	google.maps.event.addListener(marker, 'mouseover', function() {
             		hoveredMarker = this;
-            		$.getJSON('/api/http/ais?', {
+            		$.getJSON(serviceURL, {
             			method: 'details',
             			id: this.id
             		}, function(result) {
@@ -214,7 +216,7 @@ function updateShipMarkers() {
             	// Event on marker mouse click
             	google.maps.event.addListener(marker, 'click', function() {
             		selectedMarker = this;
-            		$.getJSON('/api/http/ais?', {
+            		$.getJSON(serviceURL, {
             			method: 'details',
             			past_track: '1',
             			id: this.id
