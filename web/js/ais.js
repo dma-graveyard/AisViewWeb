@@ -20,7 +20,7 @@ var mapOptions = {
 
 var serviceURL = '/ais/api/http/service?';
 
-var countries = null;
+var countries = '';
 
 // Global variables
 var mcl = null;
@@ -33,7 +33,6 @@ var markers = [];
 var infoBoxes = [];
 var init = true;
 var refresh = false;
-var country = null;
 
 var selectionImage = new google.maps.MarkerImage('img/selection.png',
     // Set size
@@ -171,14 +170,10 @@ function setupMap() {
  */
 function updateShipMarkers() {
 	$.getJSON(serviceURL, {
-    	swLat:-360,
-    	swLon:-360,
-    	neLat:360,
-    	neLon:360
-    	// This results in internal server error because of OverviewRequest StringUtils not found
-    	//,countries: countries
+    	countries: countries
     }, function (result) {
     	var ships = result.ships;
+
     	// TODO run from 0 to ships.length to remove old targets...
         for (shipId in ships) {
         	var shipJSON = ships[shipId];
@@ -207,7 +202,7 @@ function updateShipMarkers() {
             			id: this.id
             		}, function(result) {
             			var boxText = document.createElement("div");
-            			boxText.className = "shipHover"
+            			boxText.className = "shipHover";
             	        boxText.innerHTML = result.name;
             	                
             	        var myOptions = {
@@ -216,7 +211,7 @@ function updateShipMarkers() {
         	                maxWidth: 0,
         	                pixelOffset: new google.maps.Size(-75, 20),
     	                    closeBoxURL: "",
-        	                pane: "floatPane",
+        	                pane: "floatPane"
             	        };
             	        
             	        var infoBox = new InfoBox(myOptions);
@@ -329,7 +324,28 @@ function clearSelectedShip() {
  */
 function refreshMarkerClusterer() {
 	if(refresh) {
-    	mcl = new MarkerClusterer(map, batch, mcOptions);
+		if (mcl) {
+			mcl.clearMarkers();
+			mcl.addMarkers(batch, false);
+		} else {
+			mcl = new MarkerClusterer(map, batch, mcOptions);
+		}
+    	
 		refresh = false;
 	}
+}
+
+/**
+ * Method for refreshing when filtering is changed
+ */
+function filterChanged() {
+	// Remove markers first
+	if (mcl) {
+		mcl.clearMarkers();
+	}
+	init = true;
+	refresh = true;
+	markers = [];
+    batch = [];
+    updateShipMarkers();
 }

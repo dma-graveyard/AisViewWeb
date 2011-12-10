@@ -17,7 +17,7 @@ body {
 }
 
 #sidebar {
-	background: none repeat scroll 0 0 #505050;
+	background: none repeat scroll 0 0 #A0A0A0;
 	border-right: 1px solid #303030;
 	height: 100%;
 	left: 0;
@@ -31,6 +31,7 @@ body {
 	width: 210px;
 	position: relative;
 	margin: 5px auto;
+	font-size: smaller;
 }
 
 #content-container {
