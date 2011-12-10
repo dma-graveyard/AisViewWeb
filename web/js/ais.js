@@ -207,7 +207,7 @@ function updateShipMarkers() {
             			id: this.id
             		}, function(result) {
             			var boxText = document.createElement("div");
-            			boxText.className = "shipHover"
+            			boxText.className = "shipHover";
             	        boxText.innerHTML = result.name;
             	                
             	        var myOptions = {
