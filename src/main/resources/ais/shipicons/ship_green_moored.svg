@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg3039"
+   version="1.1"
+   inkscape:version="0.48.1 "
+   width="32"
+   height="32"
+   sodipodi:docname="ship_green_moored.svg"
+   inkscape:export-filename="./ship_green_moored.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <metadata
+     id="metadata3045">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3043">
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lstart"
+       style="overflow:visible">
+      <path
+         id="path3824"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(0.8,0,0,0.8,10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="DotS"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="DotS"
+       style="overflow:visible">
+      <path
+         id="path3892"
+         d="m -2.5,-1 c 0,2.76 -2.24,5 -5,5 -2.76,0 -5,-2.24 -5,-5 0,-2.76 2.24,-5 5,-5 2.76,0 5,2.24 5,5 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none;marker-end:none"
+         transform="matrix(0.2,0,0,0.2,1.48,0.2)"
+         inkscape:connector-curvature="0" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#000000"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1349"
+     inkscape:window-height="843"
+     id="namedview3041"
+     showgrid="false"
+     inkscape:zoom="10.916667"
+     inkscape:cx="6.5561993"
+     inkscape:cy="16.301044"
+     inkscape:window-x="100"
+     inkscape:window-y="100"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg3039"
+     inkscape:snap-global="false" />
+  <rect
+     style="fill:#00ff00;fill-opacity:1;stroke:#008000;stroke-width:0.90000000000000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     id="rect2988"
+     width="8.1317282"
+     height="8.1317282"
+     x="-4.065865"
+     y="18.561552"
+     transform="matrix(0.7071068,-0.70710676,0.7071068,0.70710676,0,0)" />
+  <path
+     sodipodi:type="arc"
+     style="fill:#008000;fill-opacity:1;stroke:none"
+     id="path4999-1"
+     sodipodi:cx="14.120544"
+     sodipodi:cy="9.9442282"
+     sodipodi:rx="2.3966062"
+     sodipodi:ry="2.3966062"
+     d="m 16.517151,9.9442282 a 2.3966062,2.3966062 0 1 1 -4.793213,0 2.3966062,2.3966062 0 1 1 4.793213,0 z"
+     transform="matrix(0,-0.59622861,0.59622861,0,10.070967,24.419073)" />
+</svg>

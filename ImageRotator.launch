@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/aisviewweb/src/main/java/dk/dma/aisview/util/ImageRotator.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="dk.dma.aisview.util.ImageRotator"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="${project_loc}/src/main/resources/ais/rotatedshipicons&#13;&#10;${project_loc}/src/main/resources/ais/shipicons/ship_blue&#13;&#10;${project_loc}/src/main/resources/ais/shipicons/ship_gray&#13;&#10;${project_loc}/src/main/resources/ais/shipicons/ship_green&#13;&#10;${project_loc}/src/main/resources/ais/shipicons/ship_orange&#13;&#10;${project_loc}/src/main/resources/ais/shipicons/ship_purple&#13;&#10;${project_loc}/src/main/resources/ais/shipicons/ship_red&#13;&#10;${project_loc}/src/main/resources/ais/shipicons/ship_turquoise&#13;&#10;${project_loc}/src/main/resources/ais/shipicons/ship_yellow"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="aisviewweb"/>
+</launchConfiguration>
