@@ -120,7 +120,10 @@
 						<option value="">All</option>
 						<option value="DNK">Denmark</option>
 					</select>
-					</p>					
+					</p>
+					<p>
+						TODO ship type legend and filtering
+					</p>
 				</form>
 			</div>
 			<script type="text/javascript">
