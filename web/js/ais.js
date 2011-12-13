@@ -75,11 +75,7 @@ function Ship(shipId, ship, markerScale) {
 		this.moored = true;
 	}
 	
-	// TODO move this sever side?
-	this.degree = Math.round(ship[0] / 10.0) * 10;
-	if (this.degree == 360) {
-		this.degree = 0;
-	}
+	this.degree = ship[0];
 	
 	// Generate the marker image
 	if(!this.moored) {
@@ -239,7 +235,7 @@ function updateShipMarkers() {
             			id: this.id
             		}, function(result) {
             			selectedMarker.setShadow(selectionImage);
-            			updateShipData(result);
+            			updateTargetDetails(result);
             			var tracks = result.pastTrack.points;
             			createPastTrack(tracks);
             		});
@@ -259,7 +255,7 @@ function updateShipMarkers() {
         		past_track: '1',
         		id: selectedMarker.id
         	}, function(result) {
-        		updateShipData(result);
+        		updateTargetDetails(result);
         		var tracks = result.pastTrack.points;
         		createPastTrack(tracks);
         	});
@@ -277,10 +273,56 @@ function updateShipMarkers() {
  * Method for updating selected ship's info
  * @param result 
  */
-function updateShipData(result) {
-	$("#callsign").html(result.callsign);
-	$("#lat").html(result.lat);
-	$("#lon").html(result.lon);
+function updateTargetDetails(result) {
+	$("#detailsMmsi").html(result.mmsi);
+	$("#detailsClass").html(result.vesselClass);
+	$("#detailsName").html(result.name);
+	$("#detailsCallsign").html(result.callsign);
+	$("#detailsLat").html(result.lat);
+	$("#detailsLon").html(result.lon);
+	$("#detailsImo").html(result.imoNo);
+	$("#detailsSource").html(result.source);
+	$("#detailsType").html(result.vesselType);
+	$("#detailsCargo").html(result.cargo);
+	$("#detailsCountry").html(result.country);
+	$("#detailsSog").html(result.sog + ' kn');
+	$("#detailsCog").html(result.cog + ' &deg;');
+	$("#detailsHeading").html(result.heading + ' &deg;');
+	$("#detailsDraught").html(result.draught + ' m');
+	$("#detailsRot").html(result.rot + ' &deg;/min');
+	$("#detailsWidth").html(result.width + ' m');
+	$("#detailsLength").html(result.length + ' m');
+	$("#detailsDestination").html(result.destination);
+	$("#detailsNavStatus").html(result.navStatus);
+	$("#detailsEta").html(result.eta);
+	$("#detailsPosAcc").html(result.posAcc);
+	$("#detailsLastReceived").html(result.lastReceived + " ago");
+}
+
+function clearTargetDetails() {
+	$("#detailsMmsi").html('');
+	$("#detailsClass").html('');
+	$("#detailsName").html('');
+	$("#detailsCallsign").html('');
+	$("#detailsLat").html('');
+	$("#detailsLon").html('');
+	$("#detailsImo").html('');
+	$("#detailsSource").html('');
+	$("#detailsType").html('');
+	$("#detailsCargo").html('');
+	$("#detailsCountry").html('');
+	$("#detailsSog").html('');
+	$("#detailsCog").html('');
+	$("#detailsHeading").html('');
+	$("#detailsDraught").html('');
+	$("#detailsRot").html('');
+	$("#detailsWidth").html('');
+	$("#detailsLength").html('');
+	$("#detailsDestination").html('');
+	$("#detailsNavStatus").html('');
+	$("#detailsEta").html('');
+	$("#detailsPosAcc").html('');
+	$("#detailsLastReceived").html('');
 }
 
 /**
@@ -314,9 +356,7 @@ function clearSelectedShip() {
 	if(selectedMarker != null) {
 		selectedMarker.setShadow(null);
 	}
-	$("#callsign").html("");
-	$("#lat").html("");
-	$("#lon").html("");
+	clearTargetDetails();
 }
 
 /**

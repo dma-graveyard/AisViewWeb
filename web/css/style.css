@@ -5,6 +5,8 @@ html {
 body {
 	margin: 0px;
 	padding: 0px;
+	font-family: Verdana;
+	font-size: 0.8em;
 }
 
 .clear {
@@ -17,8 +19,8 @@ body {
 }
 
 #sidebar {
-	background: none repeat scroll 0 0 #A0A0A0;
-	border-right: 1px solid #303030;
+	background: none repeat scroll 0 0 #E0E0E0;
+	border-right: 2px solid #B5B5B5;
 	height: 100%;
 	left: 0;
 	position: absolute;
@@ -27,11 +29,30 @@ body {
 	z-index: 495;
 }
 
-#info {
-	width: 210px;
+#targetDetails {
+	width: 216px;
 	position: relative;
-	margin: 5px auto;
-	font-size: smaller;
+	margin: 2px auto;
+	display: table;	
+}
+
+#detailsRow {
+	display: table-row;
+	font-size: 0.8em;		
+}
+
+#detailsLeftCol {
+	display: table-cell;
+}
+
+#detailsRightCol {
+	display: table-cell;
+} 
+
+#targetFilters {
+	width: 216px;
+	position: relative;
+	margin: 2px auto;
 }
 
 #content-container {

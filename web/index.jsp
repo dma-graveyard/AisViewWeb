@@ -15,34 +15,105 @@
 	</head>
 	<body onload="setupMap()">
 		<div id="sidebar">
-			<div id="info">
-				callsign: <div id="callsign"></div>
-				cargo: <div id="cargo"></div>
-				cog: <div id="cog"></div>
-				currentTime: <div id="currentTime"></div>
-				destination: <div id="destintation"></div>
-				draught: <div id="draught"></div>
-				eta: <div id="eta"></div>
-				heading: <div id="heading"></div>
-				id: <div id="id"></div>
-				imoNo: <div id="imoNo"></div>
-				lastReceived: <div id="lastReceived"></div>
-				lat: <div id="lat"></div>
-				length: <div id="length"></div>
-				lon: <div id="lon"></div>
-				mmsi: <div id="mmsi"></div>
-				moored: <div id="moored"></div>
-				name: <div id="name"></div>
-				navStatus: <div id="navStatus"></div>
-				posAcc: <div id="posAcc"></div>
-				sog: <div id="sog"></div>
-				source: <div id="source"></div>
-				vesselClass: <div id="vesselClass"></div>
-				vesselType: <div id="vesselType"></div>
-				width: <div id="width"></div>
+		<h3>Target details</h3>						
+			<div id="targetDetails">		
+				<div id="detailsRow">
+					<div id="detailsLeftCol">MMSI</div>
+					<div class="detailsRightCol" id="detailsMmsi"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Class</div>
+					<div class="detailsRightCol" id="detailsClass"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Name</div>
+					<div class="detailsRightCol" id="detailsName"></div>					
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Callsign</div>
+					<div class="detailsRightCol" id="detailsCallsign"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Lat</div>
+					<div class="detailsRightCol" id="detailsLat"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Lon</div>
+					<div class="detailsRightCol" id="detailsLon"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">IMO</div>
+					<div class="detailsRightCol" id="detailsImo"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Source</div>
+					<div class="detailsRightCol" id="detailsSource"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Type</div>
+					<div class="detailsRightCol" id="detailsType"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Cargo</div>
+					<div class="detailsRightCol" id="detailsCargo"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Country</div>
+					<div class="detailsRightCol" id="detailsCountry"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">SOG</div>
+					<div class="detailsRightCol" id="detailsSog"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">COG</div>
+					<div class="detailsRightCol" id="detailsCog"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Heading</div>
+					<div class="detailsRightCol" id="detailsHeading"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Draught</div>
+					<div class="detailsRightCol" id="detailsDraught"></div>			
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">ROT</div>
+					<div class="detailsRightCol" id="detailsRot"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Width</div>
+					<div class="detailsRightCol" id="detailsWidth"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Length</div>
+					<div class="detailsRightCol" id="detailsLength"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Destination</div>
+					<div class="detailsRightCol" id="detailsDestination"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Nav status</div>
+					<div class="detailsRightCol" id="detailsNavStatus"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">ETA</div>
+					<div class="detailsRightCol" id="detailsEta"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Pos acc</div>
+					<div class="detailsRightCol" id="detailsPosAcc"></div>
+				</div>
+				<div id="detailsRow">
+					<div id="detailsLeftCol">Last report</div>
+					<div class="detailsRightCol" id="detailsLastReceived"></div>
+				</div>
+				
+				
 			</div>
-			<div id="filter">
-				<h3>Filters:</h3>			
+			<h3>Target filtering</h3>
+			<div id="targetFilters">							
 				<form action="">
 					<input type="checkbox" id="DNK">Danish ships
 				</form>
