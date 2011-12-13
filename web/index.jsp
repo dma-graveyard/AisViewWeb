@@ -108,10 +108,10 @@
 				<div id="detailsRow">
 					<div id="detailsLeftCol">Last report</div>
 					<div class="detailsRightCol" id="detailsLastReceived"></div>
-				</div>
-				
-				
+				</div>				
 			</div>
+			<div id="detailsLink"></div>
+			
 			<h3>Target filtering</h3>
 			<div id="targetFilters">							
 				<form action="">

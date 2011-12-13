@@ -297,6 +297,7 @@ function updateTargetDetails(result) {
 	$("#detailsEta").html(result.eta);
 	$("#detailsPosAcc").html(result.posAcc);
 	$("#detailsLastReceived").html(result.lastReceived + " ago");
+	$("#detailsLink").html('<a href="http://www.marinetraffic.com/ais/shipdetails.aspx?mmsi=' + result.mmsi + '" target="_blank">Target info</a>');
 }
 
 function clearTargetDetails() {
@@ -323,6 +324,7 @@ function clearTargetDetails() {
 	$("#detailsEta").html('');
 	$("#detailsPosAcc").html('');
 	$("#detailsLastReceived").html('');
+	$("#detailsLink").html('');
 }
 
 /**
