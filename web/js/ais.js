@@ -1,7 +1,7 @@
 // Settings
 var mcOptions = {
 	gridSize: 50, 
-	maxZoom: 15, 
+	maxZoom: 12,
 	minimumClusterSize: 10
 };
 
