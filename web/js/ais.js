@@ -18,7 +18,7 @@ var mapOptions = {
 	mapTypeId: google.maps.MapTypeId.TERRAIN
 };
 
-var serviceURL = '/ais/api/http/service?';
+var serviceURL = '/ais/api/http/service';
 
 var countries = '';
 
