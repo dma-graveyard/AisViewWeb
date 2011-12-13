@@ -115,18 +115,19 @@
 			<h3>Target filtering</h3>
 			<div id="targetFilters">							
 				<form action="">
-					<input type="checkbox" id="DNK">Danish ships
+					<p>Target country
+					<select id="country" onchange="changeCountry(this);">
+						<option value="">All</option>
+						<option value="DNK">Denmark</option>
+					</select>
+					</p>					
 				</form>
 			</div>
 			<script type="text/javascript">
-				$("#DNK").click(function() {
-					if($(this).is(":checked")) {
-						countries = "DNK";				      
-				    } else {
-				    	countries = "";
-					}
-					filterChanged();		
-				});
+				function changeCountry(countrySelect) {
+					countries = countrySelect.options[countrySelect.selectedIndex].value;
+					filterChanged();
+				}
 			</script>
 		</div>
 		<div id="content-container">

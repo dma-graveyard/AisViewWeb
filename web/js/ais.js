@@ -60,14 +60,40 @@ function Ship(shipId, ship, markerScale) {
 	
 	// Set color and ship type
 	switch (ship[4]) {
-		case "19":
-			this.color = 2;
-			break;
+		// Passenger
 		case "18":
-			this.color = 4;
+			this.color = 0; // Blue
 			break;
+		// Cargo
+		case "19":
+			this.color = 2; // Green
+			break;
+		// Tanker
+		case "20":
+			this.color = 5; // Red
+			break;
+		// High speed craft and WIG
+		case "1":
+		case "17":
+			this.color = 7; // Yellow
+			break;
+		// Undefined
+		case "22":
+		case "0":
+			this.color = 1; // Grey
+			break;
+		// Fishing
+		case "9":
+			this.color = 3; // Orange
+			break;			
+		// Sailing etc
+		case "15":
+		case "16":
+			this.color = 4; // Purple
+			break;
+		// Pilot tug and other
 		default:
-			this.color = 1;
+			this.color = 6; // Turquoise
 			break;
 	}
 	
