@@ -183,53 +183,17 @@ function updateShipMarkers() {
             	
             	// Event on marker mouse over
             	google.maps.event.addListener(marker, 'mouseover', function() {
-            		hoveredMarker = this;
-            		$.getJSON(serviceURL, {
-            			method: 'details',
-            			id: this.id
-            		}, function(result) {
-            			var boxText = document.createElement("div");
-            			boxText.className = "shipHover";
-            	        boxText.innerHTML = result.name;
-            	                
-            	        var myOptions = {
-            	        	content: boxText,
-        	                disableAutoPan: true,
-        	                maxWidth: 0,
-        	                pixelOffset: new google.maps.Size(-75, 20),
-    	                    closeBoxURL: "",
-        	                pane: "floatPane"
-            	        };
-            	        
-            	        var infoBox = new InfoBox(myOptions);
-            	        infoBox.open(map, hoveredMarker);
-            	        infoBoxes.push(infoBox);
-            		});
+            		markerMouseOver(this);            		
             	});
             	
+            	// Event on marker mouse out
             	google.maps.event.addListener(marker, 'mouseout', function() {
-            		for(infoBox in infoBoxes) {
-            			infoBoxes[infoBox].close();
-            		}
+            		markerMouseOut(this);            		
             	});	
             	
             	// Event on marker mouse click
             	google.maps.event.addListener(marker, 'click', function() {
-            		// remove previous selection
-            		if(selectedMarker != null) {
-            			selectedMarker.setShadow(null);
-            		}
-            		selectedMarker = this;
-            		$.getJSON(serviceURL, {
-            			method: 'details',
-            			past_track: '1',
-            			id: this.id
-            		}, function(result) {
-            			selectedMarker.setShadow(selectionImage);
-            			updateTargetDetails(result);
-            			var tracks = result.pastTrack.points;
-            			createPastTrack(tracks);
-            		});
+            		markerMouseClick(this);
             	});
             	
             	/* Add marker to batch */
@@ -258,6 +222,69 @@ function updateShipMarkers() {
         	init = false;
         }
     });
+}
+
+function markerMouseClick(marker) {
+	// remove previous selection
+	if(selectedMarker != null) {
+		selectedMarker.setShadow(null);
+	}
+	selectedMarker = marker;
+	$.getJSON(serviceURL, {
+		method: 'details',
+		past_track: '1',
+		id: marker.id
+	}, function(result) {
+		selectedMarker.setShadow(selectionImage);
+		updateTargetDetails(result);
+		var tracks = result.pastTrack.points;
+		createPastTrack(tracks);
+	});
+}
+
+/**
+ * Method called on marker mouse out 
+ * @param marker
+ */
+function markerMouseOut(marker) {
+	clearTimeout(mouseOverTimedEvent);
+	for(infoBox in infoBoxes) {
+		infoBoxes[infoBox].close();
+	}	
+}
+
+/**
+ * Method called on marker mouse over
+ * @param marker
+ */
+var mouseOverTimedEvent;
+function markerMouseOver(marker) {
+	hoveredMarker = marker;
+	mouseOverTimedEvent = setTimeout("mouseOverShow()", 1000);
+}
+
+function mouseOverShow() {
+	$.getJSON(serviceURL, {
+		method: 'details',
+		id: hoveredMarker.id
+	}, function(result) {
+		var boxText = document.createElement("div");
+		boxText.className = "shipHover";
+        boxText.innerHTML = result.name;
+                
+        var myOptions = {
+        	content: boxText,
+            disableAutoPan: true,
+            maxWidth: 0,
+            pixelOffset: new google.maps.Size(-75, 20),
+            closeBoxURL: "",
+            pane: "floatPane"
+        };
+        
+        var infoBox = new InfoBox(myOptions);
+        infoBox.open(map, hoveredMarker);
+        infoBoxes.push(infoBox);
+	});
 }
 
 /**

@@ -115,10 +115,13 @@
 			<h3>Target filtering</h3>
 			<div id="targetFilters">							
 				<form action="">
-					<p>Target country
+					<p>Target countries
 					<select id="country" onchange="changeCountry(this);">
 						<option value="">All</option>
+						<option value="CHN">China</option>						
 						<option value="DNK">Denmark</option>
+						<option value="BEL,BGR,CYP,CZE,DNK,EST,FRO,FIN,AUT,FRA,DEU,GBR,GRC,HUN,IRL,ITA,LVA,LTU,LUX,MLT,NLD,POL,PRT,ROU,SVK,SVN,ESP,SWE">EU</option>
+						<option value="USA">USA</option>
 					</select>
 					</p>
 				</form>
