@@ -29,13 +29,6 @@ body {
 	z-index: 495;
 }
 
-#targetDetails {
-	width: 216px;
-	position: relative;
-	margin: 2px auto;
-	display: table;	
-}
-
 #detailsRow {
 	display: table-row;
 	font-size: 0.8em;		
@@ -47,12 +40,26 @@ body {
 
 #detailsRightCol {
 	display: table-cell;
-} 
+}
+
+#targetDetails {
+	width: 214px;
+	position: relative;
+	margin: 3px auto;
+	display: table;	
+}
 
 #targetFilters {
-	width: 216px;
+	width: 214px;
 	position: relative;
-	margin: 2px auto;
+	margin: 3px auto;
+	font-size: 0.8em;	
+}
+
+#targetLegends {
+	width: 214px;
+	position: relative;
+	margin: 3px auto;
 	font-size: 0.8em;	
 }
 

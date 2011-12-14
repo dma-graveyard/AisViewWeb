@@ -121,17 +121,25 @@
 						<option value="DNK">Denmark</option>
 					</select>
 					</p>
-					<p>
-						TODO ship type legend and filtering
-					</p>
 				</form>
 			</div>
 			<script type="text/javascript">
 				function changeCountry(countrySelect) {
-					countries = countrySelect.options[countrySelect.selectedIndex].value;
+					country = countrySelect.options[countrySelect.selectedIndex].value;
 					filterChanged();
 				}
 			</script>
+			<h3>Target legends</h3>
+			<div id="targetLegends">
+				<img src="img/ship_blue.png" align="middle"/> Passenger<br/>
+				<img src="img/ship_green.png" align="middle"/> Cargo<br/>
+				<img src="img/ship_red.png" align="middle"/> Tanker<br/>
+				<img src="img/ship_yellow.png" align="middle"/> High speed craft and WIG<br/>						
+				<img src="img/ship_orange.png" align="middle"/> Fishing<br/>
+				<img src="img/ship_purple.png" align="middle"/> Sailing and pleasure<br/>
+				<img src="img/ship_turquoise.png" align="middle"/> Pilot, tug and others<br/>
+				<img src="img/ship_gray.png" align="middle"/> Undefined<br/>
+			</div>
 		</div>
 		<div id="content-container">
 			<div id="map_canvas"></div>
