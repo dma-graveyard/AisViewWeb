@@ -1,3 +1,9 @@
+// Load view settings
+var initialLat = 56.00;
+var initialLon = 11.00;
+var initialZoom = 6;
+loadView();
+
 // Settings
 var mcOptions = {
 	gridSize: 50, 
@@ -13,9 +19,10 @@ var markerAnchor = 32/2;
 var markerAngleInterval = 10;
 
 var mapOptions = {
-	zoom: 6,
-	center: new google.maps.LatLng(56.00, 11.00),
-	mapTypeId: google.maps.MapTypeId.TERRAIN
+	zoom: initialZoom,
+	center: new google.maps.LatLng(initialLat, initialLon),
+	mapTypeId: google.maps.MapTypeId.TERRAIN,
+	minZoom: 2
 };
 
 var serviceURL = '/ais/api/http/service';
@@ -142,6 +149,11 @@ function setupMap() {
     	clearSelectedShip();
     });
     
+    // Catch event when view changes
+    google.maps.event.addListener(map, 'idle', function() {
+    	viewChanged();
+    });
+    
     // Timing for ship movement
     setInterval("updateShipMarkers()", positionUpdate);
     
@@ -228,6 +240,54 @@ function updateShipMarkers() {
     });
 }
 
+var count = 0;
+function viewChanged() {
+	saveViewCookie();	
+}
+
+function saveViewCookie() {
+	var center = map.getCenter();
+	setCookie("dma-ais-zoom", map.getZoom(), 30);
+	setCookie("dma-ais-lat", center.lat(), 30);
+	setCookie("dma-ais-lon", center.lng(), 30);
+}
+
+function loadView() {
+	var zoom = getCookie("dma-ais-zoom");
+	var lat = getCookie("dma-ais-lat");
+	var lon = getCookie("dma-ais-lon");
+	if (zoom) {
+		initialZoom = parseInt(zoom);
+	}
+	if (lat && lon) {
+		initialLat = parseFloat(lat);
+		initialLon = parseFloat(lon);
+	}
+}
+
+function setCookie(c_name,value,exdays) {
+	var exdate=new Date();
+	exdate.setDate(exdate.getDate() + exdays);
+	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+	document.cookie=c_name + "=" + c_value;
+}
+
+function getCookie(c_name) {
+	var i,x,y,ARRcookies=document.cookie.split(";");
+	for (i=0;i<ARRcookies.length;i++) {
+		x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+		y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+		x=x.replace(/^\s+|\s+$/g,"");
+		if (x==c_name) {
+			return unescape(y);
+		}
+	}
+}
+
+/**
+ * Method handling mouse click on marker
+ * @param marker
+ */
 function markerMouseClick(marker) {
 	// remove previous selection
 	if(selectedMarker != null) {
