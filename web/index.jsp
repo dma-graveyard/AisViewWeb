@@ -14,106 +14,108 @@
 		<script type="text/javascript" src="js/ais.js"></script>
 	</head>
 	<body onload="setupMap()">
-		<div id="sidebar">
-		<h3>Target details</h3>						
-			<div id="targetDetails">		
-				<div id="detailsRow">
-					<div id="detailsLeftCol">MMSI</div>
-					<div class="detailsRightCol" id="detailsMmsi"></div>
+		<div id="sidebar">							
+			<div id="targetDetails" class="sidebarElement">
+				<h3>Target details</h3>		
+				<div id="targetDetailsTable">		
+					<div id="detailsRow">
+						<div id="detailsLeftCol">MMSI</div>
+						<div class="detailsRightCol" id="detailsMmsi"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Class</div>
+						<div class="detailsRightCol" id="detailsClass"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Name</div>
+						<div class="detailsRightCol" id="detailsName"></div>					
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Callsign</div>
+						<div class="detailsRightCol" id="detailsCallsign"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Lat</div>
+						<div class="detailsRightCol" id="detailsLat"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Lon</div>
+						<div class="detailsRightCol" id="detailsLon"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">IMO</div>
+						<div class="detailsRightCol" id="detailsImo"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Source</div>
+						<div class="detailsRightCol" id="detailsSource"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Type</div>
+						<div class="detailsRightCol" id="detailsType"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Cargo</div>
+						<div class="detailsRightCol" id="detailsCargo"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Country</div>
+						<div class="detailsRightCol" id="detailsCountry"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">SOG</div>
+						<div class="detailsRightCol" id="detailsSog"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">COG</div>
+						<div class="detailsRightCol" id="detailsCog"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Heading</div>
+						<div class="detailsRightCol" id="detailsHeading"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Draught</div>
+						<div class="detailsRightCol" id="detailsDraught"></div>			
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">ROT</div>
+						<div class="detailsRightCol" id="detailsRot"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Width</div>
+						<div class="detailsRightCol" id="detailsWidth"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Length</div>
+						<div class="detailsRightCol" id="detailsLength"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Destination</div>
+						<div class="detailsRightCol" id="detailsDestination"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Nav status</div>
+						<div class="detailsRightCol" id="detailsNavStatus"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">ETA</div>
+						<div class="detailsRightCol" id="detailsEta"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Pos acc</div>
+						<div class="detailsRightCol" id="detailsPosAcc"></div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Last report</div>
+						<div class="detailsRightCol" id="detailsLastReceived"></div>
+					</div>			
 				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Class</div>
-					<div class="detailsRightCol" id="detailsClass"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Name</div>
-					<div class="detailsRightCol" id="detailsName"></div>					
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Callsign</div>
-					<div class="detailsRightCol" id="detailsCallsign"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Lat</div>
-					<div class="detailsRightCol" id="detailsLat"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Lon</div>
-					<div class="detailsRightCol" id="detailsLon"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">IMO</div>
-					<div class="detailsRightCol" id="detailsImo"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Source</div>
-					<div class="detailsRightCol" id="detailsSource"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Type</div>
-					<div class="detailsRightCol" id="detailsType"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Cargo</div>
-					<div class="detailsRightCol" id="detailsCargo"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Country</div>
-					<div class="detailsRightCol" id="detailsCountry"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">SOG</div>
-					<div class="detailsRightCol" id="detailsSog"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">COG</div>
-					<div class="detailsRightCol" id="detailsCog"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Heading</div>
-					<div class="detailsRightCol" id="detailsHeading"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Draught</div>
-					<div class="detailsRightCol" id="detailsDraught"></div>			
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">ROT</div>
-					<div class="detailsRightCol" id="detailsRot"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Width</div>
-					<div class="detailsRightCol" id="detailsWidth"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Length</div>
-					<div class="detailsRightCol" id="detailsLength"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Destination</div>
-					<div class="detailsRightCol" id="detailsDestination"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Nav status</div>
-					<div class="detailsRightCol" id="detailsNavStatus"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">ETA</div>
-					<div class="detailsRightCol" id="detailsEta"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Pos acc</div>
-					<div class="detailsRightCol" id="detailsPosAcc"></div>
-				</div>
-				<div id="detailsRow">
-					<div id="detailsLeftCol">Last report</div>
-					<div class="detailsRightCol" id="detailsLastReceived"></div>
-				</div>				
-			</div>
-			<div id="detailsLink"></div>
-			
-			<h3>Target filtering</h3>
-			<div id="targetFilters">							
+				<div id="detailsLink"></div>	
+			</div>			
+						
+			<div id="targetFilters" class="sidebarElement">
+				<h3>Target filtering</h3>							
 				<form action="">
 					<p>Target countries
 					<select id="country" onchange="changeCountry(this);">
@@ -131,9 +133,22 @@
 					country = countrySelect.options[countrySelect.selectedIndex].value;
 					filterChanged();
 				}
-			</script>
-			<h3>Target legends</h3>
-			<div id="targetLegends">
+			</script>			
+			<div id="targetCount" class="sidebarElement">
+				<h3>Target count</h3>
+				<div id="targetDetailsTable">		
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Total targets</div>
+						<div class="detailsRightCol" id="totalTargets">0</div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Targets in-view</div>
+						<div class="detailsRightCol" id="targetsInView">TODO</div>
+					</div>
+				</div>
+			</div>			
+			<div id="targetLegends" class="sidebarElement">
+				<h3>Target legends</h3>
 				<img src="img/ship_blue.png" align="middle"/> Passenger<br/>
 				<img src="img/ship_green.png" align="middle"/> Cargo<br/>
 				<img src="img/ship_red.png" align="middle"/> Tanker<br/>

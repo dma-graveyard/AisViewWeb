@@ -160,7 +160,10 @@ function updateShipMarkers() {
     	country: country
     }, function (result) {
     	var ships = result.ships;
-
+    	
+    	// Update number of targets
+    	$("#totalTargets").html(result.shipCount);
+    	
     	// TODO run from 0 to ships.length to remove old targets...
         for (shipId in ships) {
         	var shipJSON = ships[shipId];
@@ -220,7 +223,8 @@ function updateShipMarkers() {
         if(init) {
         	refreshMarkerClusterer();
         	init = false;
-        }
+        }                
+        
     });
 }
 
@@ -406,5 +410,6 @@ function filterChanged() {
 	refresh = true;
 	markers = [];
     batch = [];
+    $("#totalTargets").html("0");
     updateShipMarkers();
 }

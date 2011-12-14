@@ -31,7 +31,6 @@ body {
 
 #detailsRow {
 	display: table-row;
-	font-size: 0.8em;		
 }
 
 #detailsLeftCol {
@@ -42,25 +41,20 @@ body {
 	display: table-cell;
 }
 
-#targetDetails {
+.sidebarElement {
 	width: 214px;
 	position: relative;
 	margin: 3px auto;
-	display: table;	
+	font-size: 0.8em;
 }
 
-#targetFilters {
-	width: 214px;
-	position: relative;
-	margin: 3px auto;
-	font-size: 0.8em;	
+#targetDetails {	
+		
 }
 
-#targetLegends {
-	width: 214px;
-	position: relative;
-	margin: 3px auto;
-	font-size: 0.8em;	
+#targetDetailsTable {
+	display: table;
+	border-spacing: 2px;
 }
 
 #content-container {
@@ -88,4 +82,9 @@ body {
 	background: url('../img/boxTip.png') no-repeat;
 	opacity: 0.75;
 	width: 100px;
+}
+
+h3 {
+	font-size: 1.2em;
+	font-weight: bold;
 }
