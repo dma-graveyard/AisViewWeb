@@ -276,9 +276,8 @@ function mouseOverShow() {
         	content: boxText,
             disableAutoPan: true,
             maxWidth: 0,
-            pixelOffset: new google.maps.Size(-75, 20),
-            closeBoxURL: "",
-            pane: "floatPane"
+            pixelOffset: new google.maps.Size(-50, 20),
+            closeBoxURL: ""
         };
         
         var infoBox = new InfoBox(myOptions);

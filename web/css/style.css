@@ -81,10 +81,11 @@ body {
 	color: #fff;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
+	text-align: center;
 }
 
 .infoBox {
 	background: url('../img/boxTip.png') no-repeat;
 	opacity: 0.75;
-	width: 150px;
+	width: 100px;
 }
