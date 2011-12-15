@@ -8,5 +8,5 @@ var Browser = {
 			}
 };
 if (Browser.Version() < 9) {
-	alert("This web application will only work with browsers: Firefox, Chrome and IE 9");
+	alert("This web application will only work with browsers: Chrome, Firefox, Safari and IE 9");
 }

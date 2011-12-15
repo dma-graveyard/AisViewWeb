@@ -23,7 +23,7 @@ var mapOptions = {
 	zoom: initialZoom,
 	center: new google.maps.LatLng(initialLat, initialLon),
 	mapTypeId: google.maps.MapTypeId.TERRAIN,
-	minZoom: 3
+	minZoom: 2
 };
 
 var serviceURL = '/ais/api/http/service';
