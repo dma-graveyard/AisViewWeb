@@ -116,7 +116,7 @@
 						
 			<div id="targetFilters" class="sidebarElement">
 				<h3>Target filtering</h3>							
-				<form action="">
+				<form name="targetFilter" action="">
 					<p>Target countries
 					<select id="country" onchange="changeCountry(this);">
 						<option value="">All</option>
@@ -129,6 +129,16 @@
 				</form>
 			</div>
 			<script type="text/javascript">
+				setCurrentCountry();
+				function setCurrentCountry() {
+					for (var i=0; i<document.targetFilter.country.options.length; i++) {
+						if (country == document.targetFilter.country.options[i].value) {
+							document.targetFilter.country.options[i].selected = true;
+							return;
+						}
+					}
+					country = '';
+				} 
 				function changeCountry(countrySelect) {
 					country = countrySelect.options[countrySelect.selectedIndex].value;
 					filterChanged();

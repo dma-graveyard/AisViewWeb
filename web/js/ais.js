@@ -2,6 +2,7 @@
 var initialLat = 56.00;
 var initialLon = 11.00;
 var initialZoom = 6;
+var country = '';
 loadView();
 
 // Settings
@@ -26,8 +27,6 @@ var mapOptions = {
 };
 
 var serviceURL = '/ais/api/http/service';
-
-var country = '';
 
 // Global variables
 var mcl = null;
@@ -249,19 +248,23 @@ function saveViewCookie() {
 	var center = map.getCenter();
 	setCookie("dma-ais-zoom", map.getZoom(), 30);
 	setCookie("dma-ais-lat", center.lat(), 30);
-	setCookie("dma-ais-lon", center.lng(), 30);
+	setCookie("dma-ais-lon", center.lng(), 30);	
 }
 
 function loadView() {
 	var zoom = getCookie("dma-ais-zoom");
 	var lat = getCookie("dma-ais-lat");
 	var lon = getCookie("dma-ais-lon");
+	var con = getCookie("dma-ais-country");
 	if (zoom) {
 		initialZoom = parseInt(zoom);
 	}
 	if (lat && lon) {
 		initialLat = parseFloat(lat);
 		initialLon = parseFloat(lon);
+	}
+	if (con) {
+		country = con;
 	}
 }
 
@@ -462,6 +465,7 @@ function refreshMarkerClusterer() {
  * Method for refreshing when filtering is changed
  */
 function filterChanged() {
+	setCookie("dma-ais-country", country, 30);
 	// Remove markers first
 	if (mcl) {
 		mcl.clearMarkers();
