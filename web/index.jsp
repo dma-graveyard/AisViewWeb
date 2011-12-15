@@ -153,7 +153,7 @@
 					</div>
 					<div id="detailsRow">
 						<div id="detailsLeftCol">Targets in-view</div>
-						<div class="detailsRightCol" id="targetsInView">TODO</div>
+						<div class="detailsRightCol" id="targetsInView">0</div>
 					</div>
 				</div>
 			</div>			

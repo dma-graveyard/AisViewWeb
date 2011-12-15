@@ -1,6 +1,0 @@
-Use GMap2.getBounds() to find the bounding box. 
-The use GLatLngBounds.containsLatLng() to check each marker to see if it is visible.
-
-Alternatively you could try and use the same approach with the 
-Marker Cluster if the value of each cluster is stored in an easily 
-accessible way. (haven't looked myself)

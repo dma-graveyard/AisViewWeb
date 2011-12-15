@@ -23,7 +23,7 @@ var mapOptions = {
 	zoom: initialZoom,
 	center: new google.maps.LatLng(initialLat, initialLon),
 	mapTypeId: google.maps.MapTypeId.TERRAIN,
-	minZoom: 2
+	minZoom: 3
 };
 
 var serviceURL = '/ais/api/http/service';
@@ -234,14 +234,38 @@ function updateShipMarkers() {
         if(init) {
         	refreshMarkerClusterer();
         	init = false;
-        }                
+        }    
+        
+        targetsInView();
         
     });
 }
 
-var count = 0;
 function viewChanged() {
 	saveViewCookie();	
+	targetsInView();
+}
+
+/**
+ * Count targets in view
+ */
+function targetsInView() {
+	if (!mcl) {
+		return;
+	}
+	// Get current bounds
+	var bounds = map.getBounds();
+	// Get all marks
+	var marks = mcl.getMarkers();
+	// Check for each mark if visible
+	var count = 0;
+	for (var i=0; i < marks.length; i++) {
+		var mark = marks[i];
+		if (bounds.contains(mark.getPosition())) {
+			count++;
+		}		
+	}	
+	$("#targetsInView").html(count);
 }
 
 function saveViewCookie() {
