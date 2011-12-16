@@ -13,12 +13,12 @@ body {
 	clear: both;
 }
 
-#map_canvas {
+#mapCanvas {
 	height: 100%;
 	width: 100%;
 }
 
-#sidebar {
+#sideBar {
 	background: none repeat scroll 0 0 #E0E0E0;
 	border-right: 2px solid #B5B5B5;
 	height: 100%;
@@ -27,6 +27,15 @@ body {
 	top: 0;
 	width: 220px;
 	z-index: 495;
+}
+
+#contentContainer {
+	background: none repeat scroll 0 0 #404040;
+	height: 100%;
+	min-width: 1000px;
+	position: absolute;
+	width: 100%;
+	z-index: 494;
 }
 
 #detailsRow {
@@ -55,15 +64,6 @@ body {
 #targetDetailsTable {
 	display: table;
 	border-spacing: 2px;
-}
-
-#content-container {
-	background: none repeat scroll 0 0 #404040;
-	height: 100%;
-	min-width: 1000px;
-	position: absolute;
-	width: 100%;
-	z-index: 494;
 }
 
 .shipHover {

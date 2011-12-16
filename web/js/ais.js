@@ -130,7 +130,7 @@ Ship.prototype = {
  * Initialize the map
  */
 function setupMap() {
-    map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+    map = new google.maps.Map(document.getElementById("mapCanvas"), mapOptions);
     
     // Initial listener which runs only once when tiles have been loaded
     var initialListener = google.maps.event.addListener(map, 'tilesloaded', function () {

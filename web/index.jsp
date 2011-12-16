@@ -15,7 +15,7 @@
 		<script type="text/javascript" src="js/ais.js"></script>
 	</head>
 	<body onload="setupMap()">
-		<div id="sidebar">							
+		<div id="sideBar">							
 			<div id="targetDetails" class="sidebarElement">
 				<h3>Target details</h3>		
 				<div id="targetDetailsTable">		
@@ -170,8 +170,8 @@
 				<img src="img/ship_gray.png" align="middle"/> Undefined<br/>
 			</div>
 		</div>
-		<div id="content-container">
-			<div id="map_canvas"></div>
+		<div id="contentContainer">
+			<div id="mapCanvas"></div>
 		</div>
 	</body>
 </html>
