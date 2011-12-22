@@ -7,6 +7,7 @@ body {
 	padding: 0px;
 	font-family: Verdana;
 	font-size: 0.8em;
+	background: #E0E0E0;
 }
 
 .clear {
@@ -21,6 +22,7 @@ body {
 #sideBar {
     background: none repeat scroll 0 0 #E0E0E0;
     border-right: 2px solid #B5B5B5;
+    border-bottom: 2px solid #B5B5B5;
     top: 0px;
     left: 0px;
     height: 100%;
@@ -29,7 +31,6 @@ body {
 }
 
 #contentContainer {
-	background: none repeat scroll 0 0 #404040;
 	height: 100%;
 	min-width: 1000px;
 	position: absolute;
