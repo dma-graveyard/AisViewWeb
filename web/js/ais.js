@@ -7,7 +7,7 @@ loadView();
 
 // Settings
 var mcOptions = {
-	gridSize: 50, 
+	gridSize: 40, 
 	maxZoom: 12,
 	minimumClusterSize: 10
 };
@@ -133,7 +133,8 @@ function setupMap() {
     map = new google.maps.Map(document.getElementById("mapCanvas"), mapOptions);
     
     // Initial listener which runs only once when tiles have been loaded
-    var initialListener = google.maps.event.addListener(map, 'tilesloaded', function () {
+    var initialListener = null;
+    initialListener = google.maps.event.addListener(map, 'tilesloaded', function () {
     	updateShipMarkers();
     	google.maps.event.removeListener(initialListener);
     });
@@ -444,7 +445,7 @@ function createPastTrack(tracks) {
 	if(pastTrack != null) {
 		pastTrack.setMap(null);
 	}
-	var path = [];
+	var path = new Array();
 	for(track in tracks) {
 		currentTrack = tracks[track];
 		var latlon = new google.maps.LatLng(currentTrack.lat, currentTrack.lon);
