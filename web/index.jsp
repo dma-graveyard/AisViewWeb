@@ -167,7 +167,8 @@
 				<img src="img/ship_orange.png" align="middle"/> Fishing<br/>
 				<img src="img/ship_purple.png" align="middle"/> Sailing and pleasure<br/>
 				<img src="img/ship_turquoise.png" align="middle"/> Pilot, tug and others<br/>
-				<img src="img/ship_gray.png" align="middle"/> Undefined<br/>
+				<img src="img/ship_gray.png" align="middle"/> Undefined<br/><br/>
+				<img src="img/ship_white.png" /> Sailing <img src="img/ship_white_moored.png"> Anchored/Moored<br/>
 			</div>
 		</div>
 		<div id="contentContainer">
