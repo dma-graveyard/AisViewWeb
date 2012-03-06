@@ -18,7 +18,7 @@
 		<div id="sideBar">							
 			<div id="targetDetails" class="sidebarElement">
 				<h3>Target details</h3>		
-				<div id="targetDetailsTable">		
+				<div id="targetDetailsTable" style="display:none;">		
 					<div id="detailsRow">
 						<div id="detailsLeftCol">MMSI</div>
 						<div class="detailsRightCol" id="detailsMmsi"></div>
@@ -116,38 +116,110 @@
 			</div>			
 						
 			<div id="targetFilters" class="sidebarElement">
-				<h3>Target filtering</h3>							
-				<form name="targetFilter" action="">
-					<p>Target countries
-					<select id="country" onchange="changeCountry(this);">
-						<option value="">All</option>
-						<option value="CHN">China</option>						
-						<option value="DNK">Denmark</option>
-						<option value="BEL,BGR,CYP,CZE,DNK,EST,FRO,FIN,AUT,FRA,DEU,GBR,GRC,HUN,IRL,ITA,LVA,LTU,LUX,MLT,NLD,POL,PRT,ROU,SVK,SVN,ESP,SWE">EU</option>
-						<option value="USA">USA</option>
+				<h3>Target filtering</h3>
+				<p>
+					Presets <select name="filter_preset"
+						onchange="useFilterPreset(this);">
+						<option value="">Select ...</option>
+						<option value="country=DNK">Danish ships</option>
+						<option
+							value="country=BEL,BGR,CYP,CZE,DNK,EST,FRO,FIN,AUT,FRA,DEU,GBR,GRC,HUN,IRL,ITA,LVA,LTU,LUX,MLT,NLD,POL,PRT,ROU,SVK,SVN,ESP,SWE">EU
+							ships</option>
+						<option value="country=CHN">Chinese ships</option>
+						<option value="sourceType=SAT">Satellite</option>
+						<option value="sourceRegion=804">Satellite (NO)</option>
+						<option value="sourceRegion=802">Satellite (ExactEarth)</option>
+						<option value="sourceCountry=DNK">Source DK</option>
+						<option value="sourceSystem=AISD">AISD</option>
+						<option value="sourceSystem=IALA">IALA.net</option>
+						<option value="sourceSystem=MSIS">MSIS</option>
+						<option value="sourceSystem=TEST">AIS-TEST</option>
 					</select>
-					</p>
+				</p>
+				<form name="targetFilter" action="">
+				<div id="sidebarTable">					
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Tgt country</div>
+						<div class="detailsRightCol">
+							<input name="country" type="text" />
+						</div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Src country</div>
+						<div class="detailsRightCol">
+							<input name="sourceCountry" type="text" />
+						</div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Src type</div>
+						<div class="detailsRightCol">
+							<input name="sourceType" type="text" />
+						</div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Src region</div>
+						<div class="detailsRightCol">
+							<input name="sourceRegion" type="text" />
+						</div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Src BS</div>
+						<div class="detailsRightCol">
+							<input name="sourceBs" type="text" />
+						</div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Src system</div>
+						<div class="detailsRightCol">
+							<input name="sourceSystem" type="text" />
+						</div>
+					</div>
+					<div id="detailsRow">
+						<div id="detailsLeftCol">Vessel class</div>
+						<div class="detailsRightCol">
+							<input name="vesselClass" type="text" />
+						</div>
+					</div>				
+				</div>
 				</form>
-			</div>
-			<script type="text/javascript">
-				setCurrentCountry();
-				function setCurrentCountry() {
-					for (var i=0; i<document.targetFilter.country.options.length; i++) {
-						if (country == document.targetFilter.country.options[i].value) {
-							document.targetFilter.country.options[i].selected = true;
-							return;
+				<p><input type="button" value="Apply filter" onclick="applyFilter();"/> <input type="button" value="Clear filter" onclick="clearFilters();applyFilter();"/></p>
+				<script type="text/javascript">
+					function useFilterPreset(presetSelect) {
+						filterQuery = presetSelect.options[presetSelect.selectedIndex].value;
+						parseFilterQuery();			
+						filterChanged();
+						presetSelect.options[0].selected = true;
+					}
+					function clearFilters() {
+						for(var i = 0; i < document.targetFilter.elements.length; i++) {
+							document.targetFilter.elements[i].value = '';
 						}
 					}
-					country = '';
-				} 
-				function changeCountry(countrySelect) {
-					country = countrySelect.options[countrySelect.selectedIndex].value;
-					filterChanged();
-				}
-			</script>			
+					function parseFilterQuery() {
+						clearFilters();
+						var vars = filterQuery.split("&");
+						for (var i = 0; i < vars.length; i++) {
+				            var pair = vars[i].split("=");
+				            var exp = 'document.targetFilter.' + pair[0] + '.value = pair[1];';
+				            eval(exp);			            			         	
+						}					
+					}
+					function applyFilter() {
+						var q = new Array();
+						for(var i = 0; i < document.targetFilter.elements.length; i++) {
+							if (document.targetFilter.elements[i].value && document.targetFilter.elements[i].value.length > 0) {
+								q.push(document.targetFilter.elements[i].name + "=" + document.targetFilter.elements[i].value);
+							}
+						}						
+						filterQuery = q.join('&');
+						filterChanged();
+					}
+					parseFilterQuery();
+				</script>			
+			</div>
 			<div id="targetCount" class="sidebarElement">
 				<h3>Target count</h3>
-				<div id="targetDetailsTable">		
+				<div id="sidebarTable">		
 					<div id="detailsRow">
 						<div id="detailsLeftCol">Total targets</div>
 						<div class="detailsRightCol" id="totalTargets">0</div>
