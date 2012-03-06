@@ -120,7 +120,7 @@
 				<p>
 					Presets <select name="filter_preset"
 						onchange="useFilterPreset(this);">
-						<option value="">All</option>
+						<option value="">Select ...</option>
 						<option value="country=DNK">Danish ships</option>
 						<option
 							value="country=BEL,BGR,CYP,CZE,DNK,EST,FRO,FIN,AUT,FRA,DEU,GBR,GRC,HUN,IRL,ITA,LVA,LTU,LUX,MLT,NLD,POL,PRT,ROU,SVK,SVN,ESP,SWE">EU
@@ -169,12 +169,6 @@
 						</div>
 					</div>
 					<div id="detailsRow">
-						<div id="detailsLeftCol">Src BS</div>
-						<div class="detailsRightCol">
-							<input name="sourceBs" type="text" />
-						</div>
-					</div>
-					<div id="detailsRow">
 						<div id="detailsLeftCol">Src system</div>
 						<div class="detailsRightCol">
 							<input name="sourceSystem" type="text" />
@@ -188,12 +182,13 @@
 					</div>				
 				</div>
 				</form>
-				<p><input type="button" value="Apply filter" onclick="applyFilter();"/></p>
+				<p><input type="button" value="Apply filter" onclick="applyFilter();"/> <input type="button" value="Clear filter" onclick="clearFilters();applyFilter();"/></p>
 				<script type="text/javascript">
 					function useFilterPreset(presetSelect) {
 						filterQuery = presetSelect.options[presetSelect.selectedIndex].value;
 						parseFilterQuery();			
 						filterChanged();
+						presetSelect.options[0].selected = true;
 					}
 					function clearFilters() {
 						for(var i = 0; i < document.targetFilter.elements.length; i++) {
@@ -210,17 +205,16 @@
 						}					
 					}
 					function applyFilter() {
-						var q = '';
+						var q = new Array();
 						for(var i = 0; i < document.targetFilter.elements.length; i++) {
 							if (document.targetFilter.elements[i].value && document.targetFilter.elements[i].value.length > 0) {
-								q += document.targetFilter.elements[i].name + "=" + document.targetFilter.elements[i].value;
-								if (i < document.targetFilter.elements.length - 1) {
-									q += '&';
-								}
+								q.push(document.targetFilter.elements[i].name + "=" + document.targetFilter.elements[i].value);
 							}
-						}					
+						}						
+						filterQuery = q.join('&');
 						filterChanged();
-					}			
+					}
+					parseFilterQuery();
 				</script>			
 			</div>
 			<div id="targetCount" class="sidebarElement">

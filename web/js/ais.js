@@ -2,6 +2,7 @@
 var initialLat = 56.00;
 var initialLon = 11.00;
 var initialZoom = 6;
+var filterQuery = '';
 loadView();
 
 // Settings
@@ -38,7 +39,6 @@ var markers = [];
 var infoBoxes = [];
 var init = true;
 var refresh = false;
-var filterQuery = '';
 
 var selectionImage = new google.maps.MarkerImage('img/selection.png',
     // Set size
@@ -278,12 +278,16 @@ function loadView() {
 	var zoom = getCookie("dma-ais-zoom");
 	var lat = getCookie("dma-ais-lat");
 	var lon = getCookie("dma-ais-lon");
+	var q = getCookie("dma-ais-query");
 	if (zoom) {
 		initialZoom = parseInt(zoom);
 	}
 	if (lat && lon) {
 		initialLat = parseFloat(lat);
 		initialLon = parseFloat(lon);
+	}
+	if (q) {
+		filterQuery = q;
 	}
 }
 
@@ -484,6 +488,8 @@ function refreshMarkerClusterer() {
  * Method for refreshing when filtering is changed
  */
 function filterChanged() {
+	// Save query cookie
+	setCookie("dma-ais-query", filterQuery, 30);
 	// Remove markers first
 	if (mcl) {
 		mcl.clearMarkers();
