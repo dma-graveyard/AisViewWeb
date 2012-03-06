@@ -117,19 +117,27 @@
 						
 			<div id="targetFilters" class="sidebarElement">
 				<h3>Target filtering</h3>
+				<p>
+					Presets <select name="filter_preset"
+						onchange="useFilterPreset(this);">
+						<option value="">All</option>
+						<option value="country=DNK">Danish ships</option>
+						<option
+							value="country=BEL,BGR,CYP,CZE,DNK,EST,FRO,FIN,AUT,FRA,DEU,GBR,GRC,HUN,IRL,ITA,LVA,LTU,LUX,MLT,NLD,POL,PRT,ROU,SVK,SVN,ESP,SWE">EU
+							ships</option>
+						<option value="country=CHN">Chinese ships</option>
+						<option value="sourceType=SAT">Source SAT</option>
+						<option value="sourceRegion=804">Source SAT (NO)</option>
+						<option value="sourceRegion=802">Source SAT (ExactEarth)</option>
+						<option value="sourceCountry=DNK">Source DK</option>
+						<option value="sourceSystem=AISD">AISD</option>
+						<option value="sourceSystem=IALA">IALA.net</option>
+						<option value="sourceSystem=MSIS">MSIS</option>
+						<option value="sourceSystem=TEST">AIS-TEST</option>
+					</select>
+				</p>
 				<form name="targetFilter" action="">
-				<div id="targetDetailsTable">		
-					<div id="detailsRow">
-						<div id="detailsLeftCol">Presets</div>
-						<div class="detailsRightCol">
-							<select name="filter_preset" onchange="useFilterPreset(this);">
-								<option value="">All</option>
-								<option value="country=DNK">Danish ships</option>
-								<option value="country=BEL,BGR,CYP,CZE,DNK,EST,FRO,FIN,AUT,FRA,DEU,GBR,GRC,HUN,IRL,ITA,LVA,LTU,LUX,MLT,NLD,POL,PRT,ROU,SVK,SVN,ESP,SWE">EU ships</option>
-								<option value="country=CHN">Chinese ships</option>								
-							</select>
-						</div>
-					</div>
+				<div id="targetDetailsTable">					
 					<div id="detailsRow">
 						<div id="detailsLeftCol">Tgt country</div>
 						<div class="detailsRightCol">
@@ -177,53 +185,44 @@
 						<div class="detailsRightCol">
 							<input name="vesselClass" type="text" />
 						</div>
-					</div>
+					</div>				
 				</div>
-				<input type="button" value="Apply filter" onclick="applyFilter();"/>	
-<!--  					<p>Target country
-					<select id="country" onchange="changeCountry(this);">
-						<option value="">All</option>
-						<option value="CHN">China</option>						
-						<option value="DNK">Denmark</option>
-						<option value="BEL,BGR,CYP,CZE,DNK,EST,FRO,FIN,AUT,FRA,DEU,GBR,GRC,HUN,IRL,ITA,LVA,LTU,LUX,MLT,NLD,POL,PRT,ROU,SVK,SVN,ESP,SWE">EU</option>
-						<option value="USA">USA</option>
-					</select>
-					</p>   -->
 				</form>
-			</div>
-			<script type="text/javascript">
-				function useFilterPreset(presetSelect) {
-					alert('Hello');
-					filterQuery = presetSelect.options[countrySelect.selectedIndex].value;
-					alert(filterQuery);
-					parseFilterQuery();					
-					filterChanged();
-				}
-				function parseFilterQuery() {
-					// Fill fields from query
-				}
-				function applyFilter() {
-					// Make filterQuery from fields
-					
-					filterChanged();
-				}
-
-			
-				setCurrentCountry();
-				function setCurrentCountry() {
-					for (var i=0; i<document.targetFilter.country.options.length; i++) {
-						if (country == document.targetFilter.country.options[i].value) {
-							document.targetFilter.country.options[i].selected = true;
-							return;
+				<p><input type="button" value="Apply filter" onclick="applyFilter();"/></p>
+				<script type="text/javascript">
+					function useFilterPreset(presetSelect) {
+						filterQuery = presetSelect.options[presetSelect.selectedIndex].value;
+						parseFilterQuery();			
+						filterChanged();
+					}
+					function clearFilters() {
+						for(var i = 0; i < document.targetFilter.elements.length; i++) {
+							document.targetFilter.elements[i].value = '';
 						}
 					}
-					country = '';
-				} 
-				function changeCountry(countrySelect) {
-					country = countrySelect.options[countrySelect.selectedIndex].value;
-					filterChanged();
-				}
-			</script>			
+					function parseFilterQuery() {
+						clearFilters();
+						var vars = filterQuery.split("&");
+						for (var i = 0; i < vars.length; i++) {
+				            var pair = vars[i].split("=");
+				            var exp = 'document.targetFilter.' + pair[0] + '.value = pair[1];';
+				            eval(exp);			            			         	
+						}					
+					}
+					function applyFilter() {
+						var q = '';
+						for(var i = 0; i < document.targetFilter.elements.length; i++) {
+							if (document.targetFilter.elements[i].value && document.targetFilter.elements[i].value.length > 0) {
+								q += document.targetFilter.elements[i].name + "=" + document.targetFilter.elements[i].value;
+								if (i < document.targetFilter.elements.length - 1) {
+									q += '&';
+								}
+							}
+						}					
+						filterChanged();
+					}			
+				</script>			
+			</div>
 			<div id="targetCount" class="sidebarElement">
 				<h3>Target count</h3>
 				<div id="targetDetailsTable">		
