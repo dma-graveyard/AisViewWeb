@@ -2,7 +2,6 @@
 var initialLat = 56.00;
 var initialLon = 11.00;
 var initialZoom = 6;
-var country = '';
 loadView();
 
 // Settings
@@ -39,6 +38,7 @@ var markers = [];
 var infoBoxes = [];
 var init = true;
 var refresh = false;
+var filterQuery = '';
 
 var selectionImage = new google.maps.MarkerImage('img/selection.png',
     // Set size
@@ -168,9 +168,7 @@ function setupMap() {
  * @returns
  */
 function updateShipMarkers() {
-	$.getJSON(serviceURL, {
-    	country: country
-    }, function (result) {
+	$.getJSON(serviceURL, filterQuery, function (result) {
     	var ships = result.ships;
     	
     	// Update number of targets
@@ -280,16 +278,12 @@ function loadView() {
 	var zoom = getCookie("dma-ais-zoom");
 	var lat = getCookie("dma-ais-lat");
 	var lon = getCookie("dma-ais-lon");
-	var con = getCookie("dma-ais-country");
 	if (zoom) {
 		initialZoom = parseInt(zoom);
 	}
 	if (lat && lon) {
 		initialLat = parseFloat(lat);
 		initialLon = parseFloat(lon);
-	}
-	if (con) {
-		country = con;
 	}
 }
 
@@ -490,7 +484,6 @@ function refreshMarkerClusterer() {
  * Method for refreshing when filtering is changed
  */
 function filterChanged() {
-	setCookie("dma-ais-country", country, 30);
 	// Remove markers first
 	if (mcl) {
 		mcl.clearMarkers();
