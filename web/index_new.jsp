@@ -18,7 +18,7 @@
 		<div id="sideBar">							
 			<div id="targetDetails" class="sidebarElement">
 				<h3>Target details</h3>		
-				<div id="targetDetailsTable">		
+				<div id="targetDetailsTable" style="display:none;">		
 					<div id="detailsRow">
 						<div id="detailsLeftCol">MMSI</div>
 						<div class="detailsRightCol" id="detailsMmsi"></div>
@@ -126,9 +126,9 @@
 							value="country=BEL,BGR,CYP,CZE,DNK,EST,FRO,FIN,AUT,FRA,DEU,GBR,GRC,HUN,IRL,ITA,LVA,LTU,LUX,MLT,NLD,POL,PRT,ROU,SVK,SVN,ESP,SWE">EU
 							ships</option>
 						<option value="country=CHN">Chinese ships</option>
-						<option value="sourceType=SAT">Source SAT</option>
-						<option value="sourceRegion=804">Source SAT (NO)</option>
-						<option value="sourceRegion=802">Source SAT (ExactEarth)</option>
+						<option value="sourceType=SAT">Satellite</option>
+						<option value="sourceRegion=804">Satellite (NO)</option>
+						<option value="sourceRegion=802">Satellite (ExactEarth)</option>
 						<option value="sourceCountry=DNK">Source DK</option>
 						<option value="sourceSystem=AISD">AISD</option>
 						<option value="sourceSystem=IALA">IALA.net</option>
@@ -137,7 +137,7 @@
 					</select>
 				</p>
 				<form name="targetFilter" action="">
-				<div id="targetDetailsTable">					
+				<div id="sidebarTable">					
 					<div id="detailsRow">
 						<div id="detailsLeftCol">Tgt country</div>
 						<div class="detailsRightCol">
@@ -219,7 +219,7 @@
 			</div>
 			<div id="targetCount" class="sidebarElement">
 				<h3>Target count</h3>
-				<div id="targetDetailsTable">		
+				<div id="sidebarTable">		
 					<div id="detailsRow">
 						<div id="detailsLeftCol">Total targets</div>
 						<div class="detailsRightCol" id="totalTargets">0</div>

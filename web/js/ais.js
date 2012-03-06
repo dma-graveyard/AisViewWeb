@@ -381,6 +381,7 @@ function mouseOverShow() {
  * @param result 
  */
 function updateTargetDetails(result) {
+	$("#targetDetailsTable").show();
 	$("#detailsMmsi").html(result.mmsi);
 	$("#detailsClass").html(result.vesselClass);
 	$("#detailsName").html(result.name);
@@ -408,6 +409,7 @@ function updateTargetDetails(result) {
 }
 
 function clearTargetDetails() {
+	$("#targetDetailsTable").hide();
 	$("#detailsMmsi").html('');
 	$("#detailsClass").html('');
 	$("#detailsName").html('');

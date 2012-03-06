@@ -76,6 +76,12 @@ input, select {
 	border-spacing: 2px;
 }
 
+#sidebarTable {
+	display: table;
+	border-spacing: 2px;
+}
+
+
 .shipHover {
 	margin-top: 7px;
 	background: black;
