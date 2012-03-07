@@ -132,7 +132,7 @@
 						<option value="sourceCountry=DNK">Source DK</option>
 						<option value="sourceSystem=AISD">AISD</option>
 						<option value="sourceSystem=IALA">IALA.net</option>
-						<option value="sourceSystem=MSIS">MSIS</option>
+						<option value="sourceSystem=MSSIS">MSSIS</option>
 						<option value="sourceSystem=TEST">AIS-TEST</option>
 					</select>
 				</p>
