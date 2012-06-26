@@ -129,6 +129,7 @@
 						<option value="sourceType=SAT">Satellite</option>
 						<option value="sourceRegion=804">Satellite (NO)</option>
 						<option value="sourceRegion=802">Satellite (ExactEarth)</option>
+						<option value="sourceRegion=808">Satellite (ORBCOMM)</option>
 						<option value="sourceCountry=DNK">Source DK</option>
 						<option value="sourceSystem=AISD">AISD</option>
 						<option value="sourceSystem=IALA">IALA.net</option>
