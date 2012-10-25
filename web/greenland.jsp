@@ -4,7 +4,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF8">
-		<title>DMA AisViewWeb</title>
+		<title>DMA AisViewWeb - Greenland</title>
 		<link rel="stylesheet" type="text/css" href="css/style.css" />
 		<script type="text/javascript" src="js/browsercheck.js"></script>
 		<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
@@ -12,7 +12,7 @@
 		<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markermanager/1.0/src/markermanager.js"></script>
 		<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclustererplus/2.0.6/src/markerclusterer.js"></script>
 		<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/infobox/1.1.9/src/infobox.js"></script>
-		<script type="text/javascript" src="js/ais.js"></script>
+		<script type="text/javascript" src="js/ais_greenland.js"></script>
 	</head>
 	<body onload="setupMap()">
 		<div id="sideBar">							
@@ -115,111 +115,6 @@
 				<div id="detailsLink"></div>	
 			</div>			
 						
-			<div id="targetFilters" class="sidebarElement">
-				<h3>Target filtering</h3>
-				<p>
-					Presets <select name="filter_preset"
-						onchange="useFilterPreset(this);">
-						<option value="">Select ...</option>
-						<option value="country=DNK">Danish ships</option>
-						<option
-							value="country=BEL,BGR,CYP,CZE,DNK,EST,FRO,FIN,AUT,FRA,DEU,GBR,GRC,HUN,IRL,ITA,LVA,LTU,LUX,MLT,NLD,POL,PRT,ROU,SVK,SVN,ESP,SWE">EU
-							ships</option>
-						<option value="country=CHN">Chinese ships</option>
-						<option value="sourceType=SAT">Satellite</option>
-						<option value="sourceRegion=804">Satellite (NO)</option>
-						<option value="sourceRegion=802">Satellite (ExactEarth)</option>
-						<option value="sourceRegion=808">Satellite (ORBCOMM)</option>
-						<option value="sourceCountry=DNK">Source DK</option>
-						<option value="sourceSystem=AISD">AISD</option>
-						<option value="sourceSystem=IALA">IALA.net</option>
-						<option value="sourceSystem=MSSIS">MSSIS</option>
-						<option value="sourceSystem=TEST">AIS-TEST</option>
-					</select>
-				</p>
-				<form name="targetFilter" action="">
-				<div id="sidebarTable">					
-					<div id="detailsRow">
-						<div id="detailsLeftCol">Tgt country</div>
-						<div class="detailsRightCol">
-							<input name="country" type="text" />
-						</div>
-					</div>
-					<div id="detailsRow">
-						<div id="detailsLeftCol">Src country</div>
-						<div class="detailsRightCol">
-							<input name="sourceCountry" type="text" />
-						</div>
-					</div>
-					<div id="detailsRow">
-						<div id="detailsLeftCol">Src type</div>
-						<div class="detailsRightCol">
-							<input name="sourceType" type="text" />
-						</div>
-					</div>
-					<div id="detailsRow">
-						<div id="detailsLeftCol">Src region</div>
-						<div class="detailsRightCol">
-							<input name="sourceRegion" type="text" />
-						</div>
-					</div>
-					<div id="detailsRow">
-						<div id="detailsLeftCol">Src BS</div>
-						<div class="detailsRightCol">
-							<input name="sourceBs" type="text" />
-						</div>
-					</div>
-					<div id="detailsRow">
-						<div id="detailsLeftCol">Src system</div>
-						<div class="detailsRightCol">
-							<input name="sourceSystem" type="text" />
-						</div>
-					</div>
-					<div id="detailsRow">
-						<div id="detailsLeftCol">Vessel class</div>
-						<div class="detailsRightCol">
-							<input name="vesselClass" type="text" />
-						</div>
-					</div>				
-				</div>
-				</form>
-				<p><input type="button" value="Apply filter" onclick="applyFilter();"/> <input type="button" value="Clear filter" onclick="clearFilters();applyFilter();"/></p>
-				<script type="text/javascript">
-					function useFilterPreset(presetSelect) {
-						filterQuery = presetSelect.options[presetSelect.selectedIndex].value;
-						parseFilterQuery();			
-						filterChanged();
-						presetSelect.options[0].selected = true;
-					}
-					function clearFilters() {
-						for(var i = 0; i < document.targetFilter.elements.length; i++) {
-							document.targetFilter.elements[i].value = '';
-						}
-					}
-					function parseFilterQuery() {
-						clearFilters();
-						var vars = filterQuery.split("&");
-						for (var i = 0; i < vars.length; i++) {
-				            var pair = vars[i].split("=");
-				            if (pair.length == 2) {
-				            	var exp = 'document.targetFilter.' + pair[0] + '.value = pair[1];';
-					            eval(exp);			            			         	
-				            }
-						}					
-					}
-					function applyFilter() {
-						var q = new Array();
-						for(var i = 0; i < document.targetFilter.elements.length; i++) {
-							if (document.targetFilter.elements[i].value && document.targetFilter.elements[i].value.length > 0) {
-								q.push(document.targetFilter.elements[i].name + "=" + document.targetFilter.elements[i].value);
-							}
-						}						
-						filterQuery = q.join('&');
-						filterChanged();
-					}
-					parseFilterQuery();
-				</script>			
-			</div>
 			<div id="targetCount" class="sidebarElement">
 				<h3>Target count</h3>
 				<div id="sidebarTable">		
